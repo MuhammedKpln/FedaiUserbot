@@ -1,10 +1,3 @@
-"""Emoji
-Available Commands:
-.emoji shrug
-.emoji apple
-.emoji :/
-.emoji -_-"""
-
 from telethon import events
 import asyncio
 from events import extract_args, sedenify
