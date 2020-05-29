@@ -34,7 +34,7 @@ async def _(event):
        await event.edit("`Herhangi bir kullanıcı mesajına cevap verin.`")
        return
     reply_message = await event.get_reply_message() 
-    if not reply_message.text:
+    if not reply_message.voice:
        await event.edit("`Mesaja cevap verin.`")
        return
     chat = "@voicybot"
