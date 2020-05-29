@@ -6,14 +6,12 @@ Available Commands:
 .emoji -_-"""
 
 from telethon import events
-
 import asyncio
-from userbot.events import register
-from events import extract_args
+from events import extract_args, sedenify
 
 
 
-@register(outgoing=True, pattern="^.hack")
+@sedenify(outgoing=True, pattern="^.hack")
 async def port_hack(event):
     if event.fwd_from:
         return
