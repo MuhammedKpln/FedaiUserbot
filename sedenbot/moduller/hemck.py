@@ -36,6 +36,7 @@ async def port_hack(event):
             "`Hacking... 100%\n█████████HACKED███████████ `",
             f"`Targeted Account Hacked by @muhammedkaplan...\n\n {event.text} `"
         ]
+        
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 11])
