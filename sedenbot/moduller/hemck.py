@@ -9,14 +9,15 @@ from telethon import events
 
 import asyncio
 from userbot.events import register
+from events import extract_args
 
 
 
-
-@register(outgoing=True, pattern="^.hack(?: |$)(.*)")
+@register(outgoing=True, pattern="^.hack")
 async def port_hack(event):
     if event.fwd_from:
         return
+    message = extract_args(afk_e)
 
     animation_interval = 3
     animation_ttl = range(0, 11)
@@ -34,9 +35,9 @@ async def port_hack(event):
             "`Hacking... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
             "`Hacking... 84%\n█████████████████████▒▒▒▒ `",
             "`Hacking... 100%\n█████████HACKED███████████ `",
-            f"`Targeted Account Hacked by @muhammedkaplan...\n\n {event.text} `"
+            f"`Targeted Account Hacked by @muhammedkaplan...\n\n {message} `"
         ]
-        
+
     for i in animation_ttl:
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 11])
