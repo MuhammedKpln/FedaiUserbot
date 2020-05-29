@@ -59,7 +59,9 @@ async def _(event):
           elif response.text.startswith("Forward"):
              await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
           else: 
-             await event.edit(response.text)
+            await event.edit('Sizi 3 saniye bekletmek zorunda kalacam..')
+            sleep(3)
+            await event.edit(response.text)
           sleep(1)
           await bot.send_read_acknowledge(chat, max_id=(response.id+3))
           await conv.cancel_all()
@@ -67,5 +69,5 @@ async def _(event):
 CMD_HELP.update({
     "voicy": 
     ".voicy \
-    \nKullanım: Ses atan kullanicilarin sesini dinleyin.\n"
+    \nKullanım: Ses atan kullanicilarin sesini yaziya döker.\n"
 })
