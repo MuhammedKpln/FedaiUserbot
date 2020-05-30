@@ -26,7 +26,7 @@ async def port_hack(event):
             "`Hacking... 52%\n█████████████▒▒▒▒▒▒▒▒▒▒▒▒ `",
             "`Hacking... 84%\n█████████████████████▒▒▒▒ `",
             "`Hacking... 100%\n█████████HACKED███████████ `",
-            f"`Targeted Account Hacked by @muhammedkaplan...\n\n {message} `"
+            f"`Targeted Account Hacked by @hasanisabbah...\n\n {message} `"
         ]
 
     for i in animation_ttl:
