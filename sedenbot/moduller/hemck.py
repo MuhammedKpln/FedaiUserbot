@@ -1,6 +1,6 @@
 from telethon import events
 import asyncio
-from events import extract_args, sedenify
+from ..events import extract_args, sedenify
 
 
 
@@ -8,7 +8,7 @@ from events import extract_args, sedenify
 async def port_hack(event):
     if event.fwd_from:
         return
-    message = extract_args(afk_e)
+    message = extract_args(event)
 
     animation_interval = 3
     animation_ttl = range(0, 11)
