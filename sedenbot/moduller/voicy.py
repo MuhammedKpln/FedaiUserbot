@@ -44,27 +44,28 @@ async def _(event):
        return
     await event.edit("`İşleniyor...`")
     async with bot.conversation(chat, exclusive=False) as conv:
-          response = None
-          try:
-              msg = await reply_message.forward_to(chat)
-              response = await conv.get_response(message=msg, timeout=5)
-          except YouBlockedUserError: 
-              await event.edit(f"`Lütfen {chat} engelini kaldırın ve tekrar deneyin`")
-              return
-          except Exception as e:
-              print(e.__class__)
-
-          if not response:
-              await event.edit("`Botdan cevap alamadım!`")
-          elif response.text.startswith("Forward"):
-             await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
-          else: 
+        print('23')
+        response = None
+        try:
+            msg = await reply_message.forward_to(chat)
             await event.edit('Sizi 3 saniye bekletmek zorunda kalacam..')
             sleep(3)
+            message_edited = await conv.wait_event(events.MessageEdited(chat))
+            response = await conv.get_response(message=msg, timeout=5)
+        except YouBlockedUserError: 
+            await event.edit(f"`Lütfen {chat} engelini kaldırın ve tekrar deneyin`")
+            return
+        except Exception as e:
+            print(e.__class__)
+
+        if not response:
+            await event.edit("`Botdan cevap alamadım!`")
+        elif response.text.startswith("Forward"):
+            await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
+        else: 
             await event.edit(response.text)
-          sleep(1)
-          await bot.send_read_acknowledge(chat, max_id=(response.id+3))
-          await conv.cancel_all()
+            await bot.send_read_acknowledge(chat, max_id=(response.id+3))
+            await conv.cancel_all()
 
 CMD_HELP.update({
     "voicy": 
