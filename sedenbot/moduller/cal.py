@@ -15,27 +15,27 @@ async def _(event):
     print(f'limit {limit}') 
     sleepAfterAwhile = []
     async for user in event.client.iter_participants(event.chat_id, limit=int(limit)):
-        # if isinstance(user.status, UserStatusOnline):
-        if not user.bot and not user.contact and not user.is_self:
-            print(user.first_name)
-            try:
-                result = await event.client(AddContactRequest(
-                    id=int(user.id),
-                    first_name=str(user.first_name),
-                    last_name=str(user.last_name) if user.last_name else '',
-                    phone='' if not user.phone else str(user.phone),
-                    add_phone_privacy_exception=False
-                ))
-                sleepAfterAwhile.append(user)
-                # sendToUser = await bot.get_entity(339388824)
-                # await bot.send_message(sendToUser, f'@{user.username or user.first_name} `kullanicisini dizladim oglim`')
-                if len(sleepAfterAwhile) > 4:
-                    print('Uyuyuorum suan ', len(sleepAfterAwhile))
-                    sleep(61)
-                    sleepAfterAwhile.clear()
-            except Exception as err:
-                # e = sys.exc_info()[0]
-                print(err)
+        if isinstance(user.status, UserStatusOnline):
+            if not user.bot and not user.contact and not user.is_self:
+                print(user.first_name)
+                try:
+                    result = await event.client(AddContactRequest(
+                        id=int(user.id),
+                        first_name=str(user.first_name),
+                        last_name=str(user.last_name) if user.last_name else '',
+                        phone='' if not user.phone else str(user.phone),
+                        add_phone_privacy_exception=False
+                    ))
+                    sleepAfterAwhile.append(user)
+                    sendToUser = await bot.get_entity(339388824)
+                    await bot.send_message(sendToUser, f'@{user.username or user.first_name} `kullanicisini dizladim oglim`')
+                    if len(sleepAfterAwhile) > 4:
+                        print('Uyuyuorum suan ', len(sleepAfterAwhile))
+                        sleep(61)
+                        sleepAfterAwhile.clear()
+                except Exception as err:
+                    # e = sys.exc_info()[0]
+                    print(err)
 
 
 @sedenify(outgoing=True, pattern='.as')
