@@ -6,7 +6,7 @@
 ### CI derlemesi başarılı, ancak yerel olarak çalışırken hala sözdizimi hataları alıyorsanız, muhtemelen kaynakla ilgili bir sorun değil, python sürümünüzle alakalı bir sorun.
 
 ### # Heroku Deploy
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/TeamDerUntergang/Telegram-UserBot/tree/seden)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/muhammedkpln/Telegram-UserBot/tree/seden)
 
 ```
 #include <std/disclaimer.h>
