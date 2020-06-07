@@ -1,8 +1,8 @@
 from sedenbot.events import sedenify, extract_args
-from sedenbot import bot
+from sedenbot import bot, LOGS
 import asyncio
 from telethon import functions, types, events
-from telethon.tl.functions.contacts import AddContactRequest, GetStatusesRequest
+from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest, GetStatusesRequest
 from telethon.tl.types import UserStatusOnline, UserStatusRecently, ChannelParticipantsRecent
 from time import sleep
 from telethon.tl.functions.channels import InviteToChannelRequest
@@ -59,3 +59,16 @@ async def uyebas(event):
     except Exception as e:
         print(e)
 
+
+@sedenify(outgoing=True, pattern="^.contacts")
+async def contactsCount(event):
+    try:
+        await event.edit('`Rehber yükleniyor...`')
+        result = await event.client(GetContactsRequest(hash=0))
+        totalUsers = len(result.users)
+        await event.edit(f'`Toplam rehber üye sayisi: {totalUsers}`')
+
+    except Exception as e:
+        await event.edit('`Bilinmeyen hata ile karsilastik..`')
+        LOGS.exception(e)
+        
