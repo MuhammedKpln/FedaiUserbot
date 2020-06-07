@@ -54,7 +54,7 @@ async def remove_notes(clr):
         return await clr.edit(
             "**{}** `notu başarıyla silindi`".format(notename))
 
-@sedenify(outgoing=True, pattern=r"^.save(.*)")
+@sedenify(outgoing=True, pattern=r"^.savenote(.*)")
 async def add_note(fltr):
     """ .save komutu bir sohbette not kaydeder. """
     try:

@@ -16,13 +16,53 @@
 
 import time
 import threading
+from pprint import pprint
 
 from re import sub
 
 from asyncio import wait, sleep
 
-from sedenbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from sedenbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from sedenbot.events import extract_args, extract_args_arr, sedenify
+
+
+@sedenify(outgoing=True, pattern="^.savespamm")
+async def add_new_spam(e):
+    try:
+        from sedenbot.moduller.sql_helper.spam import add_spam
+    except:
+        await e.edit("`Bot Non-SQL modunda çalışıyor!!`")
+        return
+
+    await e.edit('Bakiyorum suan')
+    chat = await e.client.get_chat()
+    await e.edit(','.join(await bot.iter_participants(chat, 40)))
+
+    print(await bot.iter_participants(chat, 40))
+    # print(await e.client.iter_participants)
+
+
+    spamEvent = extract_args(e).split(' ')
+
+    if len(spamEvent) < 2:
+        await e.edit('`Doğru kullanım: .savespam spamİsmi atılacakSpam`')
+        return
+       
+    spamName = spamEvent[0]
+    spam = spamEvent[1]
+
+    saveSpam = add_spam(spamName, spam)
+    pprint( add_spam(spamName, spam))
+    if saveSpam:
+        await e.edit('Yeni spam başarılı bir şekilde eklendii.')
+    else:
+        await e.edit('`Yeni spam eklenirker bir hata meydana geldi!`')
+
+
+
+
+
+
 
 @sedenify(outgoing=True, pattern="^.tspam")
 async def tmeme(e):
