@@ -4,7 +4,7 @@ import asyncio
 from telethon import functions, types, events
 from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest, GetStatusesRequest
 from telethon.tl.types import UserStatusOnline, UserStatusRecently, ChannelParticipantsRecent
-from time import sleep
+from asyncio import sleep
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import AddChatUserRequest, DeleteChatUserRequest
 
@@ -41,7 +41,7 @@ async def _(event):
                 if len(sleepAfterAwhile) > 4:
                     if notifyUser:
                         await _sendMessageToMainAccount(sleepAfterAwhile)
-                    sleep(61)
+                    await sleep(61)
                     sleepAfterAwhile.clear()
 
 
