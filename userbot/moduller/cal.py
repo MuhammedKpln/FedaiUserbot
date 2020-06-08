@@ -69,14 +69,16 @@ async def _stopPullingUsers(event):
 @register(outgoing=True, pattern='.as')
 async def uyebas(event):
     await event.edit('`USER DUMP BASLADI (Database yükleniyor..) - HASSANSABBAH.`')
+    sleep(3)
     # await event.edit('Görmediniz say eheheh')
     result = await event.client(GetStatusesRequest())
+    limit = extract_args(event) if extract_args else 10
     users = []
     for userStatus in result:
         user = await bot.get_entity(userStatus.user_id)
         users.append(user)
 
-        if len(users) == 20:
+        if len(users) == limit:
             break
     try:
         await event.edit('Eklemeler basladi..')
