@@ -62,7 +62,7 @@ async def _(event):
         elif response.text.startswith("Forward"):
             await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
         else: 
-            await event.edit(f'Voicy: {response.text}')
+            await event.edit(f'**Şşş, Sanırım bunları duydum**: `{response.text}`')
             await bot.send_read_acknowledge(chat, max_id=(response.id+3))
             await conv.cancel_all()
 
