@@ -3,10 +3,7 @@ FROM archlinux:latest
 
 # Gerekyi paketleri yükle
 RUN pacman -Syyu --noconfirm \
-    aria2 \
     curl \
-    chromium \
-    ffmpeg \
     figlet \
     gcc \
     git \
@@ -22,7 +19,6 @@ RUN pacman -Syyu --noconfirm \
     libxslt \
     linux-headers \
     musl \
-    neofetch \
     nss \
     openssl \
     postgresql \
