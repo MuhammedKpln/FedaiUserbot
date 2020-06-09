@@ -15,37 +15,6 @@ INVALID_PH = '\nHATA: Girilen telefon numarası geçersiz' \
              '\n  Ipucu: Ülke kodunu kullanarak numaranı gir' \
              '\n       Telefon numaranızı tekrar kontrol edin'
 
-async def load_brain():
-    if path.exists("learning-data-root.check"):
-        remove("learning-data-root.check")
-    URL = 'https://raw.githubusercontent.com/MuhammedKpln/databasescape/master/learning-data-root.check'
-    with open('learning-data-root.check', 'wb') as load:
-        load.write(get(URL).content)
-    DB = connect("learning-data-root.check")
-    CURSOR = DB.cursor()
-    CURSOR.execute("""SELECT * FROM BRAIN1""")
-    ALL_ROWS = CURSOR.fetchall()
-    for i in ALL_ROWS:
-        BRAIN_CHECKER.append(i[0])
-    DB.close()
-
-async def load_bl():
-    if path.exists("blacklist.check"):
-        remove("blacklist.check")
-    URL = 'https://raw.githubusercontent.com/MuhammedKpln/databaseblacklist/master/blacklist.check'
-    with open('blacklist.check', 'wb') as load:
-        load.write(get(URL).content)    
-    DB = connect("blacklist.check")
-    CURSOR = DB.cursor()
-    CURSOR.execute("SELECT * FROM RETARDS")
-    ALL_ROWS = CURSOR.fetchall()
-    for i in ALL_ROWS:
-        BLACKLIST.append(i[0])
-    DB.close()
-
-runas(load_brain())
-runas(load_bl())
-
 try:
     bot.start()
 except PhoneNumberInvalidError:
