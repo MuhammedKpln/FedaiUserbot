@@ -30,6 +30,7 @@ DEF_UNAPPROVED_MSG = PM_UNAPPROVED or ("`Hey! Bu bir bot. Endişelenme.\n\n`"
                   "`Sahibim sana PM atma izni vermedi. `"
                   "`Lütfen sahibimin aktif olmasını bekleyin, o genellikle PM'leri onaylar.\n\n`"
                   "`Bildiğim kadarıyla o kafayı yemiş insanlara PM izni vermiyor.`")
+PM_USER_MESSAGE
 # =================================================================
 @register(incoming=True, disable_edited=True)
 async def permitpm(event):
@@ -259,7 +260,7 @@ async def blockpm(block):
         await block.client(BlockRequest(block.chat_id))
         aname = await block.client.get_entity(block.chat_id)
         if not isinstance(aname, User):
-            await apprvpm.edit("`Şu an bir PM'de değilsin ve birinin mesajını alıntılamadın.`")
+            await block.edit("`Şu an bir PM'de değilsin ve birinin mesajını alıntılamadın.`")
             return
         await block.edit("`Engellendin!`")
         name0 = str(aname.first_name)

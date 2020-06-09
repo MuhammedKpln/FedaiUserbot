@@ -23,9 +23,6 @@ from sys import version_info
 from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
 from math import ceil
-
-from pylast import LastFMNetwork, md5
-from pySmartDL import SmartDL
 from dotenv import load_dotenv
 from requests import get
 from telethon.sync import TelegramClient, custom, events
@@ -33,32 +30,6 @@ from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.sessions import StringSession
 from telethon.utils import get_peer_id
 load_dotenv("config.env")
-
-
-def paginate_help(page_number, loaded_modules, prefix):
-    number_of_rows = 5
-    number_of_cols = 2
-    helpable_modules = []
-    for p in loaded_modules:
-        if not p.startswith("_"):
-            helpable_modules.append(p)
-    helpable_modules = sorted(helpable_modules)
-    modules = [custom.Button.inline(
-        "{} {}".format("🔸", x),
-        data="ub_modul_{}".format(x))
-        for x in helpable_modules]
-    pairs = list(zip(modules[::number_of_cols], modules[1::number_of_cols]))
-    if len(modules) % number_of_cols == 1:
-        pairs.append((modules[-1],))
-    max_num_pages = ceil(len(pairs) / number_of_rows)
-    modulo_page = page_number % max_num_pages
-    if len(pairs) > number_of_rows:
-        pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
-            [
-            (custom.Button.inline("⬅️Geri", data="{}_prev({})".format(prefix, modulo_page)),
-             custom.Button.inline("İleri➡️", data="{}_next({})".format(prefix, modulo_page)))
-        ]
-    return pairs
 
 
 # Bot günlükleri kurulumu:
@@ -103,7 +74,8 @@ STRING_SESSION = os.environ.get("STRING_SESSION", None)
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID", None))
 
 # Alive Mesajını değiştirme.
-ALIVE_MESAJI = os.environ.get("ALIVE_MESAJI", "Merhaba Seden! Seni Seviyorum ❤️")
+ALIVE_MESAJI = os.environ.get(
+    "ALIVE_MESAJI", "Merhaba Seden! Seni Seviyorum ❤️")
 
 # UserBot günlükleme özelliği.
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
@@ -113,7 +85,6 @@ LOGSPAMMER = sb(os.environ.get("LOGSPAMMER", "False"))
 PM_AUTO_BAN = sb(os.environ.get("PM_AUTO_BAN", "False"))
 
 # Güncelleyici için Heroku hesap bilgileri.
-HEROKU_MEMEZ = sb(os.environ.get("HEROKU_MEMEZ", "False"))
 HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
 HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
 
@@ -151,7 +122,6 @@ TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 # Temiz Karşılama
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
 
-# Last.fm modülü
 BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
 
@@ -169,23 +139,6 @@ PM_UNAPPROVED = os.environ.get("PM_UNAPPROVED", None)
 
 CMD_HELP = {}
 
-
-# CloudMail.ru ve MEGA.nz ayarlama
-if not os.path.exists('bin'):
-    os.mkdir('bin')
-
-binaries = {
-    "https://raw.githubusercontent.com/NaytSeyd/megadown/master/megadown":
-    "bin/megadown",
-    "https://raw.githubusercontent.com/NaytSeyd/cmrudl.py/master/cmrudl.py":
-    "bin/cmrudl"
-}
-
-for binary, path in binaries.items():
-    downloader = SmartDL(binary, path, progress_bar=False)
-    downloader.start()
-    os.chmod(path, 0o755)
-
 # 'bot' değişkeni
 if STRING_SESSION:
     # pylint: devre dışı=geçersiz ad
@@ -194,19 +147,20 @@ else:
     # pylint: devre dışı=geçersiz ad
     bot = TelegramClient("sedenbot", API_KEY, API_HASH)
 
+
 async def check_botlog_chatid():
     if not BOTLOG_CHATID and LOGSPAMMER:
         LOGS.info(
             "HATA: LOGSPAMMER çalışması için BOTLOG_CHATID değişkenini ayarlamanız gerekir. "
             "Bot kapatılıyor..."
-            )
+        )
         quit(1)
 
     elif not BOTLOG_CHATID and BOTLOG:
         LOGS.info(
             "Günlüğe kaydetme özelliğinin çalışması için BOTLOG_CHATID değişkenini ayarlamanız gerekir."
             "Bot Kapatılıyor..."
-            )
+        )
         quit(1)
 
     elif not BOTLOG or not LOGSPAMMER:
@@ -220,10 +174,21 @@ async def check_botlog_chatid():
         quit(1)
 
 with bot:
+    me = bot.get_me()
+    uid = me.id
+    try:
+        bot.loop.run_until_complete(check_botlog_chatid())
+    except:
+        LOGS.info(
+            "HATA: Girilen BOTLOG_CHATID değişkeni geçerli değildir. "
+            "Lütfen girdiğiniz değeri kontrol edin. "
+            "Bot kapatılıyor.."
+        )
+        quit(1)
     try:
         bot(JoinChannelRequest("@SedenUserBot"))
-        bot(JoinChannelRequest("@SedenUserBotSupport"))       
-        
+        bot(JoinChannelRequest("@SedenUserBotSupport"))
+
         if not BOT_TOKEN:
             raise Exception()
 
@@ -234,8 +199,32 @@ with bot:
         ).start(bot_token=BOT_TOKEN)
 
         dugmeler = CMD_HELP
-        me = bot.get_me()
-        uid = me.id
+
+        def paginate_help(page_number, loaded_modules, prefix):
+            number_of_rows = 5
+            number_of_cols = 2
+            helpable_modules = []
+            for p in loaded_modules:
+                if not p.startswith("_"):
+                    helpable_modules.append(p)
+            helpable_modules = sorted(helpable_modules)
+            modules = [custom.Button.inline(
+                "{} {}".format("🔸", x),
+                data="ub_modul_{}".format(x))
+                for x in helpable_modules]
+            pairs = list(zip(modules[::number_of_cols],
+                             modules[1::number_of_cols]))
+            if len(modules) % number_of_cols == 1:
+                pairs.append((modules[-1],))
+            max_num_pages = ceil(len(pairs) / number_of_rows)
+            modulo_page = page_number % max_num_pages
+            if len(pairs) > number_of_rows:
+                pairs = pairs[modulo_page * number_of_rows:number_of_rows * (modulo_page + 1)] + \
+                    [
+                    (custom.Button.inline("⬅️Geri", data="{}_prev({})".format(prefix, modulo_page)),
+                     custom.Button.inline("İleri➡️", data="{}_next({})".format(prefix, modulo_page)))
+                ]
+            return pairs
 
         @tgbot.on(events.NewMessage(pattern='/start'))
         async def handler(event):
@@ -328,7 +317,7 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
                 else:
                     help_string = str(CMD_HELP[modul_name])
 
-                reply_pop_up_alert = help_string if help_string  else \
+                reply_pop_up_alert = help_string if help_string else \
                     "{} modülü için herhangi bir döküman yazılmamış.".format(
                         modul_name)
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
@@ -342,17 +331,6 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
             "Eğer bunun dışında bir sorun olduğunu düşünüyorsanız bize ulaşın."
         )
 
-    try:
-        bot.loop.run_until_complete(check_botlog_chatid())
-    except:
-        LOGS.info(
-            "HATA: Girilen BOTLOG_CHATID değişkeni geçerli değildir. "
-            "Lütfen girdiğiniz değeri kontrol edin. "
-            "Bot kapatılıyor.."
-        )
-        quit(1)
-
-
 # Küresel Değişkenler
 COUNT_MSG = 0
 USERS = {}
@@ -363,79 +341,6 @@ LASTMSG = {}
 ENABLE_KILLME = True
 ISAFK = False
 AFKREASON = None
-ZALG_LIST = [[
-    "̖",
-    " ̗",
-    " ̘",
-    " ̙",
-    " ̜",
-    " ̝",
-    " ̞",
-    " ̟",
-    " ̠",
-    " ̤",
-    " ̥",
-    " ̦",
-    " ̩",
-    " ̪",
-    " ̫",
-    " ̬",
-    " ̭",
-    " ̮",
-    " ̯",
-    " ̰",
-    " ̱",
-    " ̲",
-    " ̳",
-    " ̹",
-    " ̺",
-    " ̻",
-    " ̼",
-    " ͅ",
-    " ͇",
-    " ͈",
-    " ͉",
-    " ͍",
-    " ͎",
-    " ͓",
-    " ͔",
-    " ͕",
-    " ͖",
-    " ͙",
-    " ͚",
-    " ",
-],
-    [
-    " ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗",
-    " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌",
-    " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ",
-    " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ",
-    " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"
-],
-    [
-    " ̕",
-    " ̛",
-    " ̀",
-    " ́",
-    " ͘",
-    " ̡",
-    " ̢",
-    " ̧",
-    " ̨",
-    " ̴",
-    " ̵",
-    " ̶",
-    " ͜",
-    " ͝",
-    " ͞",
-    " ͟",
-    " ͠",
-    " ͢",
-    " ̸",
-    " ̷",
-    " ͡",
-]]
-
 
 PLUGINID = os.environ.get("PLUGIN_CHANNEL_ID", None)
 # Plugin İçin
