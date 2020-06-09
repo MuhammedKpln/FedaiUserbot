@@ -71,8 +71,7 @@ async def shutdown(event):
 
 @register(outgoing=True, pattern=".alive")
 async def alive(event):
-    if not await bot.disconnected:
-        await event.edit('Bot kurulu ve sorunsuz çalışıyor')
+    await event.edit('**Bot kurulu ve sorunsuz çalışıyor**')
     
 
 @register(outgoing=True, pattern="^.restart$")
