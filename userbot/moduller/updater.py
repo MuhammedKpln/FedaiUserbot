@@ -28,7 +28,7 @@ from os import remove, execle, path, makedirs, getenv, environ
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
 from userbot import CMD_HELP, bot, HEROKU_APIKEY, HEROKU_APPNAME, UPSTREAM_REPO_URL
-from userbot.events import extract_args, sedenify
+from userbot.events import extract_args, register
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), 'requirements.txt')
@@ -52,7 +52,7 @@ async def update_requirements():
     except Exception as e:
         return repr(e)
 
-@sedenify(outgoing=True, pattern=r"^\.update(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.update(?: |$)(.*)")
 async def upstream(ups):
     await ups.edit(f"`SedenBot için güncellemeler denetleniyor...`")
     conf = extract_args(ups)

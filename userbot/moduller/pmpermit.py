@@ -30,7 +30,7 @@ DEF_UNAPPROVED_MSG = PM_UNAPPROVED or ("`Hey! Bu bir bot. Endişelenme.\n\n`"
                   "`Sahibim sana PM atma izni vermedi. `"
                   "`Lütfen sahibimin aktif olmasını bekleyin, o genellikle PM'leri onaylar.\n\n`"
                   "`Bildiğim kadarıyla o kafayı yemiş insanlara PM izni vermiyor.`")
-PM_USER_MESSAGE
+PM_USER_MSG = DEF_UNAPPROVED_MSG
 # =================================================================
 @register(incoming=True, disable_edited=True)
 async def permitpm(event):
