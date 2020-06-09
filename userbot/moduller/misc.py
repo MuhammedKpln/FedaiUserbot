@@ -24,7 +24,7 @@ from random import randint
 from asyncio import sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
-from userbot.events import extract_args, register
+from userbot.events import extract_args, register, me
 
 @register(outgoing=True, pattern="^.random")
 async def randomise(items):
@@ -71,7 +71,18 @@ async def shutdown(event):
 
 @register(outgoing=True, pattern=".alive")
 async def alive(event):
-    await event.edit('**Bot kurulu ve sorunsuz çalışıyor**')
+        DEFAULTUSER =  me.first_name
+        await event.edit("**İSTATİSTİKLERİM** \n` ŞUAN :` **✅ ÇALIŞIYORUM **\n\n"
+                     "`TELETHON VERSİYONU:` **6.0.9**\n`Python:` **3.7.4**\n"
+                     "`VERİTABANİ:` **HERŞEY YOLUNDA 🙂**\n`HİÇ BİR PROBLEM BULUNMADI🔥!\n`"
+                     "`DEPLOY SERVİSİ: HEROKU INC.\n"
+                     "`IP:` Hmm..\n"
+                     "`İŞLETİM SİSTEMİ:` LINUX\n"
+                     "`UYDU:` ⚡TÜRKSAT-3A⚡\n"
+                     "`KODLAMA DİLİ:` PYTHON\n"
+                     f"`PATRONUM`: {DEFAULTUSER}\n\n"
+                     "`UYDU DURUMU: ✅ UYGUN\n\n"
+                     "[⚡ PATRONUM OLMAYA NE DERSİN?⚡](https://github.com/muhammedkpln/telegram-userbot)") 
     
 
 @register(outgoing=True, pattern="^.restart$")
