@@ -68,23 +68,26 @@ async def _stopPullingUsers(event):
 
 @register(outgoing=True, pattern='.as')
 async def uyebas(event):
-    await event.edit('`USER DUMP BASLADI (Database yükleniyor..) - HASSANSABBAH.`')
-    sleep(3)
+    await event.edit('`USER DUMP BASLADI (Database yükleniyor..) - by` @hasanisabbah.')
+    await sleep(3)
     # await event.edit('Görmediniz say eheheh')
-    result = await event.client(GetStatusesRequest())
-    limit = extract_args(event) if extract_args else 10
-    users = []
-    for userStatus in result:
-        user = await bot.get_entity(userStatus.user_id)
-        users.append(user)
+    result = await event.client(GetContactsRequest(
+        hash=0
+    ))
+    limit = 10
+    # users = []
+    # for userStatus in result:
+    #     user = await bot.get_entity(userStatus.user_id)
+    #     await event.edit(f'`{user.id}` kullanici hafizaya alindi..')
+    #     users.append(user)
 
-        if len(users) == limit:
-            break
+    #     if len(users) == limit:
+    #         break
     try:
-        await event.edit('Eklemeler basladi..')
+        # await event.edit('Eklemeler basladi..')
         await event.client(InviteToChannelRequest(
-            channel=1371749757,
-            users=users
+            channel=1425906189,
+            users=result.users[:10]
         ))
     except Exception as e:
         print(e)

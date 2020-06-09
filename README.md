@@ -1,12 +1,9 @@
-![GitHub repo size](https://img.shields.io/github/repo-size/TeamDerUntergang/Telegram-UserBot?color=Blue&label=Repo%20Boyutu)
-![GitHub](https://img.shields.io/github/license/TeamDerUntergang/Telegram-UserBot?color=Orange&label=Lisans)
-
-# Seden-UserBot
+# Fedai-UserBot
 
 ### CI derlemesi başarılı, ancak yerel olarak çalışırken hala sözdizimi hataları alıyorsanız, muhtemelen kaynakla ilgili bir sorun değil, python sürümünüzle alakalı bir sorun.
 
 ### # Heroku Deploy
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/muhammedkpln/Telegram-UserBot/tree/seden)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/muhammedkpln/fedaiuserbot/tree/fedai)
 
 ```
 #include <std/disclaimer.h>
@@ -25,11 +22,7 @@ Python3 üzerinde bir sqlalchemy veritabanı ile çalışan modüler bir telegra
 
 Bot PaperPlane tabanından alınarak, Türkçe'ye çevrilip birkaç özellik eklenmiştir. Eğlenceli özellikler [SkittBot](https://github.com/skittles9823/SkittBot)'dan alınmıştır. Son derece modüler ve kullanımı basit bir botdur.
 
-Bu botu yapılandırmak için wiki sayfasını kontrol edebilirsiniz [Wiki](https://github.com/TeamDerUntergang/Telegram-UserBot/wiki/Bot-Kurulum-Rehberi)
-
-Herhangi bir istek & şikâyet & öneri varsa [destek grubundan](https://t.me/SedenUserBotSupport) bana ulaşabilirsiniz.
-
-Lütfen kurulum talimatları için [Wiki](https://github.com/TeamDerUntergang/Telegram-UserBot/wiki/Bot-Kurulum-Rehberi) sayfasına gidin! Talimatı okumadan verilen sorulara cevap verilmeyecektir.
+Herhangi bir istek & şikâyet & öneri varsa [destek grubundan](https://t.me/FedaiUserBotSupport) bana ulaşabilirsiniz.
 
 ### Teşekkürler:
 
@@ -47,7 +40,7 @@ Bu proje boyunca bana yardımcı olan insanlara teşekkür etmek istiyorum:
 * [@kandnub](https://github.com/kandnub)
 * [@pqhaz](https://github.com/pqhaz)
 * [@yshalsager](https://github.com/yshalsager)
-* [@NaytSeyd](https://github.com/NaytSeyd)
+* [@MuhammedKpln](https://github.com/MuhammedKpln)
 * [@ReversedPosix](https://github.com/ReversedPosix)
 * [@quiec](https://github.com/quiec)
 * [@erdemozdemir98](https://github.com/erdemozdemir98)

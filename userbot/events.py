@@ -1,4 +1,4 @@
-# Copyright (C) 2020 TeamDerUntergang.
+
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ def register(**args):
                         date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                         text = "**USERBOT HATA RAPORU**\n"
-                        link = "[Seden Destek Grubu](https://t.me/SedenUserBotSupport)"
+                        link = "[Fedai Destek Grubu](https://t.me/FedaiUserBotSupport)"
                         text += "İsterseniz, bunu rapor edebilirsiniz "
                         text += f"- sadece bu mesajı buraya iletin {link}.\n"
                         text += "Hata ve Tarih dışında hiçbir şey kaydedilmez\n"

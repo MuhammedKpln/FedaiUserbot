@@ -1,18 +1,3 @@
-# Copyright (C) 2020 TeamDerUntergang.
-#
-# SedenUserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# SedenUserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
 """ UserBot hazırlanışı. """
 
@@ -73,10 +58,6 @@ STRING_SESSION = os.environ.get("STRING_SESSION", None)
 # Kanal / Grup ID yapılandırmasını günlüğe kaydetme.
 BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID", None))
 
-# Alive Mesajını değiştirme.
-ALIVE_MESAJI = os.environ.get(
-    "ALIVE_MESAJI", "Merhaba Seden! Seni Seviyorum ❤️")
-
 # UserBot günlükleme özelliği.
 BOTLOG = sb(os.environ.get("BOTLOG", "False"))
 LOGSPAMMER = sb(os.environ.get("LOGSPAMMER", "False"))
@@ -91,7 +72,7 @@ HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
 # Güncelleyici için özel (fork) repo linki.
 UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/MuhammedKpln/Telegram-UserBot.git")
+    "https://github.com/MuhammedKpln/fedaiuserbot.git")
 
 # Ayrıntılı konsol günlügü
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -145,7 +126,7 @@ if STRING_SESSION:
     bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
 else:
     # pylint: devre dışı=geçersiz ad
-    bot = TelegramClient("sedenbot", API_KEY, API_HASH)
+    bot = TelegramClient("fedaibot", API_KEY, API_HASH)
 
 
 async def check_botlog_chatid():
@@ -186,8 +167,8 @@ with bot:
         )
         quit(1)
     try:
-        bot(JoinChannelRequest("@SedenUserBot"))
-        bot(JoinChannelRequest("@SedenUserBotSupport"))
+        bot(JoinChannelRequest("@FedaiUserBot"))
+        bot(JoinChannelRequest("@FedaiUserBotSupport"))
 
         if not BOT_TOKEN:
             raise Exception()
@@ -229,7 +210,7 @@ with bot:
         @tgbot.on(events.NewMessage(pattern='/start'))
         async def handler(event):
             if not event.message.from_id == uid:
-                await event.reply(f'`Merhaba ben` @SedenUserBot`! Ben sahibime (`@{me.username}`) yardımcı olmak için varım, yaani sana yardımcı olamam :/ Ama sen de bir Seden açabilirsin; Kanala bak` @SedenUserBot')
+                await event.reply(f'`Merhaba ben` @FedaiUserBot`! Ben sahibime (`@{me.username}`) yardımcı olmak için varım, yaani sana yardımcı olamam :/ Kanala bak` @FedaiUserBot')
             else:
                 await event.reply(f'`Senin için çalışıyorum :) Seni seviyorum. ❤️`')
 
@@ -238,33 +219,33 @@ with bot:
             builder = event.builder
             result = None
             query = event.text
-            if event.query.user_id == uid and query.startswith("@SedenUserBot"):
+            if event.query.user_id == uid and query.startswith("@FedaiUserBot"):
                 rev_text = query[::-1]
                 buttons = paginate_help(0, dugmeler, "helpme")
                 result = builder.article(
                     f"Lütfen Sadece .yardım Komutu İle Kullanın",
                     text="{}\nYüklenen Modül Sayısı: {}".format(
-                        "Merhaba! Ben @SedenUserBot kullanıyorum!\n\nhttps://github.com/TeamDerUntergang/Telegram-UserBot", len(dugmeler)),
+                        "Merhaba! Ben @FedaiUserBot kullanıyorum!\n\nhttps://github.com/muhammedkpln/fedaiuserbot", len(dugmeler)),
                     buttons=buttons,
                     link_preview=False
                 )
             elif query.startswith("tb_btn"):
                 result = builder.article(
-                    "© @SedenUserBot",
-                    text=f"@SedenUserBot ile güçlendirildi",
+                    "© @FedaiUserBot",
+                    text=f"@FedaiUserBot ile güçlendirildi",
                     buttons=[],
                     link_preview=True
                 )
             else:
                 result = builder.article(
-                    "© @SedenUserBot",
-                    text="""@SedenUserBot'u kullanmayı deneyin!
+                    "© @FedaiUserBot",
+                    text="""@FedaiUserBot'u kullanmayı deneyin!
 Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın, siz başkasının botunu yönetemezsiniz! Alttaki GitHub adresinden tüm kurulum detayları anlatılmıştır.""",
                     buttons=[
-                        [custom.Button.url("Kanala Katıl", "https://t.me/SedenUserBot"), custom.Button.url(
-                            "Gruba Katıl", "https://t.me/SedenUserBotSupport")],
+                        [custom.Button.url("Kanala Katıl", "https://t.me/FedaiUserBot"), custom.Button.url(
+                            "Gruba Katıl", "https://t.me/FedaiUserBotSupport")],
                         [custom.Button.url(
-                            "GitHub", "https://github.com/TeamDerUntergang/Telegram-UserBot")]
+                            "GitHub", "https://github.com/MuhammedKpln/fedaiuserbot")]
                     ],
                     link_preview=False
                 )
@@ -282,7 +263,7 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
                 # https://t.me/TelethonChat/115200
                 await event.edit(buttons=buttons)
             else:
-                reply_pop_up_alert = "Lütfen kendine bir @SedenUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
+                reply_pop_up_alert = "Lütfen kendine bir @FedaiUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
         @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
@@ -300,7 +281,7 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
                 # https://t.me/TelethonChat/115200
                 await event.edit(buttons=buttons)
             else:
-                reply_pop_up_alert = "Lütfen kendine bir @SedenUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
+                reply_pop_up_alert = "Lütfen kendine bir @FedaiUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
         @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
@@ -313,7 +294,7 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
                 cmdhel = str(CMD_HELP[modul_name])
                 if len(cmdhel) > 90:
                     help_string = str(CMD_HELP[modul_name])[
-                        :90] + "\n\nDevamı için .seden " + modul_name + " yazın."
+                        :90] + "\n\nDevamı için .fedai " + modul_name + " yazın."
                 else:
                     help_string = str(CMD_HELP[modul_name])
 
@@ -322,7 +303,7 @@ Hesabınızı bot'a çevirebilirsiniz ve bunları kullanabilirsiniz. Unutmayın,
                         modul_name)
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
             else:
-                reply_pop_up_alert = "Lütfen kendine bir @SedenUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
+                reply_pop_up_alert = "Lütfen kendine bir @FedaiUserBot aç, benim mesajlarımı düzenlemeye çalışma!"
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
     except:
         LOGS.info(

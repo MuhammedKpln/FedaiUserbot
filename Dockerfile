@@ -32,12 +32,12 @@ RUN pacman -Syyu --noconfirm \
     wget  
 
 # Repoyu klonla ve çalışma dizinini hazırla
-RUN git clone https://github.com/muhammedkpln/Telegram-UserBot -b seden /root/seden
-RUN mkdir /root/seden/bin/
-WORKDIR /root/seden/
+RUN git clone https://github.com/muhammedkpln/fedaiuserbot -b fedai /root/fedai
+RUN mkdir /root/fedai/bin/
+WORKDIR /root/fedai/
 
 # Oturum ve yapılandırmayı kopyala (varsa)
-COPY ./sample_config.env ./userbot.session* ./config.env* /root/seden/
+COPY ./sample_config.env ./userbot.session* ./config.env* /root/fedai/
 
 # Zaman dilimini ayarla
 ENV TZ=Europe/Istanbul
@@ -46,4 +46,4 @@ ENV TZ=Europe/Istanbul
 RUN pip3 install -r requirements.txt
 
 # Botu çalıştır
-CMD ["python3","seden.py"]
+CMD ["python3","main.py"]

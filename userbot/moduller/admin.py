@@ -1,18 +1,3 @@
-# Copyright (C) 2020 TeamDerUntergang.
-#
-# SedenUserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# SedenUserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
 """
 Grup yönetmenize yardımcı olacak UserBot modülü
@@ -236,7 +221,7 @@ async def ban(bon):
     # Eğer kullanıcı sudo ise
     if user.id in BRAIN_CHECKER:
         await bon.edit(
-            f"`Ban Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Seden yetkilisi.. Yani onu yasaklayamam.`"
+            f"`Ban Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu yasaklayamam.`"
         )
         return
 
@@ -337,7 +322,7 @@ async def spider(spdr):
     # Eğer kullanıcı sudo ise
     if user.id in BRAIN_CHECKER:
         await spdr.edit(
-            f"`Mute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Seden yetkilisi.. Yani onu susturamam.`"
+            f"`Mute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu susturamam.`"
         )
         return
 
@@ -528,7 +513,7 @@ async def gspider(gspdr):
 
     # Eğer kullanıcı sudo ise
     if user.id in BRAIN_CHECKER:
-        await gspdr.edit(f"`Gmute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Seden yetkilisi.. Yani onu susturamam.`")
+        await gspdr.edit(f"`Gmute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu susturamam.`")
         return
 
     # Başarı olursa bilgi ver
@@ -698,7 +683,7 @@ async def kick(usr):
     # Eğer kullanıcı sudo ise
     if user.id in BRAIN_CHECKER:
         await usr.edit(
-            f"`Kick Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Seden yetkilisi.. Yani onu gruptan çıkartamam.`"
+            f"`Kick Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu gruptan çıkartamam.`"
         )
         return
 

@@ -1,22 +1,14 @@
-# Copyright (C) 2020 TeamDerUntergang.
+
 #
-# SedenUserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+
 #
-# SedenUserBot is distributed in the hope that it will be useful,
+# FedaiUserBot is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-# Credits: @NaytSeyd (for fix errors)
-#
-# Bu modül commit sayısına bağlı olarak botu günceller.
-#
 
 import sys
 import asyncio
@@ -54,7 +46,7 @@ async def update_requirements():
 
 @register(outgoing=True, pattern=r"^\.update(?: |$)(.*)")
 async def upstream(ups):
-    await ups.edit(f"`SedenBot için güncellemeler denetleniyor...`")
+    await ups.edit(f"`FedaiBot için güncellemeler denetleniyor...`")
     conf = extract_args(ups)
     off_repo = UPSTREAM_REPO_URL
     force_update = False
@@ -89,9 +81,9 @@ async def upstream(ups):
     ac_br = repo.active_branch.name
     if ac_br != 'seden':
         await ups.edit(
-            f'**[SedenBot Güncelleyici]:**`Galiba botunun branch ismini değiştirdin. Kullandığın branch ismi: ({ac_br}). '
+            f'**[FedaiBot Güncelleyici]:**`Galiba botunun branch ismini değiştirdin. Kullandığın branch ismi: ({ac_br}). '
             f'Böyle olursa botunu güncelleyemem. Çünkü branch ismi uyuşmuyor..'
-            f'Lütfen botunu SedenBot resmi repodan kullan.`')
+            f'Lütfen botunu FedaiBot resmi repodan kullan.`')
         repo.__del__()
         return
 
@@ -131,7 +123,7 @@ async def upstream(ups):
 
     if force_update:
         await ups.edit(
-            f'`Güncel SedenBot kodu zorla eşitleniyor...`')
+            f'`Güncel FedaiBot kodu zorla eşitleniyor...`')
     else:
         await ups.edit(f'`Bot güncelleştiriliyor lütfen bekle...`')
     if HEROKU_APIKEY is not None:
@@ -140,7 +132,7 @@ async def upstream(ups):
         heroku_applications = heroku.apps()
         if not HEROKU_APPNAME:
             await ups.edit(
-                f'`SedenBot Güncelleyiciyi kullanabilmek için HEROKU_APPNAME değişkenini tanımlamalısın. Aksi halde güncelleyici çalışmaz.`'
+                f'`FedaiBot Güncelleyiciyi kullanabilmek için HEROKU_APPNAME değişkenini tanımlamalısın. Aksi halde güncelleyici çalışmaz.`'
             )
             repo.__del__()
             return
@@ -154,7 +146,7 @@ async def upstream(ups):
             )
             repo.__del__()
             return
-        await ups.edit(f'`SedenBot Güncelleniyor..\
+        await ups.edit(f'`FedaiBot Güncelleniyor..\
                         \nBu işlem 4-5 dakika sürebilir, lütfen sabırla bekle. Beklemene değer :)`'
                        )
         ups_rem.fetch(ac_br)
@@ -173,7 +165,7 @@ async def upstream(ups):
             repo.__del__()
             return
         await ups.edit(f'`Güncelleme başarıyla tamamlandı!\n'
-                       f'SedenBot yeniden başlatılıyor sabırla beklediğin için teşekkür ederiz :)`')
+                       f'FedaiBot yeniden başlatılıyor sabırla beklediğin için teşekkür ederiz :)`')
     else:
         try:
             ups_rem.pull(ac_br)
@@ -181,7 +173,7 @@ async def upstream(ups):
             repo.git.reset("--hard", "FETCH_HEAD")
         await update_requirements()
         await ups.edit(f'`Güncelleme başarıyla tamamlandı!\n'
-                       f'SedenBot yeniden başlatılıyor sabırla beklediğin için teşekkür ederiz :)`')
+                       f'FedaiBot yeniden başlatılıyor sabırla beklediğin için teşekkür ederiz :)`')
         args = [sys.executable, "seden.py"]
         execle(sys.executable, *args, environ)
         return

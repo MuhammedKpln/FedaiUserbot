@@ -1,18 +1,3 @@
-# Copyright (C) 2020 TeamDerUntergang.
-#
-# SedenUserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# SedenUserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
 """ UserBot başlangıç noktası """
 
@@ -33,7 +18,7 @@ INVALID_PH = '\nHATA: Girilen telefon numarası geçersiz' \
 async def load_brain():
     if path.exists("learning-data-root.check"):
         remove("learning-data-root.check")
-    URL = 'https://raw.githubusercontent.com/NaytSeyd/databasescape/master/learning-data-root.check'
+    URL = 'https://raw.githubusercontent.com/MuhammedKpln/databasescape/master/learning-data-root.check'
     with open('learning-data-root.check', 'wb') as load:
         load.write(get(URL).content)
     DB = connect("learning-data-root.check")
@@ -47,7 +32,7 @@ async def load_brain():
 async def load_bl():
     if path.exists("blacklist.check"):
         remove("blacklist.check")
-    URL = 'https://raw.githubusercontent.com/NaytSeyd/databaseblacklist/master/blacklist.check'
+    URL = 'https://raw.githubusercontent.com/MuhammedKpln/databaseblacklist/master/blacklist.check'
     with open('blacklist.check', 'wb') as load:
         load.write(get(URL).content)    
     DB = connect("blacklist.check")
@@ -74,7 +59,7 @@ for module_name in ALL_MODULES:
         LOGS.warn(f"{module_name} modülü yüklenirken bir hata oluştu.")
 
 LOGS.info("Botunuz çalışıyor! Herhangi bir sohbete .alive yazarak Test edin."
-          " Yardıma ihtiyacınız varsa, Destek grubumuza gelin t.me/SedenUserBotSupport")
-LOGS.info("Bot sürümünüz Seden v3.2")
+          " Yardıma ihtiyacınız varsa, Destek grubumuza gelin t.me/FedaiUserBotSupport")
+LOGS.info("Bot sürümünüz Fedai v1.4")
 
 bot.run_until_disconnected()
