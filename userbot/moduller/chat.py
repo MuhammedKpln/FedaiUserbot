@@ -21,7 +21,8 @@ from asyncio import sleep
 from userbot.moduller.admin import get_user_from_event
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
 from userbot.events import extract_args, register
-
+from telethon.events import NewMessage
+from telethon.tl.types import ChannelParticipantsAdmins
 @register(outgoing=True, pattern="^.id")
 async def useridgetter(target):
     """ .id komutu belirlenen kullanıcının ID numarasını verir """
@@ -162,6 +163,24 @@ async def sedNinjaToggle(event):
             await sleep(1)
             await event.delete()
 
+
+@register(outgoing=True, pattern='.admincagir')
+async def _(event: NewMessage.Event) -> None:
+    if event.fwd_from:
+        return
+    mentions = "@admin: **Efenim buralarda birseyler oluyor seri köz getir**"
+    chat = await event.get_input_chat()
+    async for x in bot.iter_participants(chat, filter=ChannelParticipantsAdmins):
+        mentions += f"[\u2063](tg://user?id={x.id})"
+    reply_message = None
+    if event.reply_to_msg_id:
+        reply_message = await event.get_reply_message()
+        await reply_message.reply(mentions)
+    else:
+        await event.reply(mentions)
+    await event.delete()
+
+
 CMD_HELP.update({
     "chat":
     ".chatid\
@@ -180,5 +199,6 @@ CMD_HELP.update({
 \nKullanım: İsteğe bağlı özel metin ile kullanıcının profiline kalıcı bir bağlantı oluşturun.\
 \n\n.regexninja on/off\
 \nKullanım: Küresel olarak regex ninja modülünü etkinleştirir / devre dışı bırakır.\
-\nRegex ninja modülü regex bot tarfından tetiklenen mesajları silmek için yardımcı olur."
+\nRegex ninja modülü regex bot tarfından tetiklenen mesajları silmek için yardımcı olur.",
+"admincagir": ".admincagir \nKullanim: Grup adminlerini cagirir"
 })
