@@ -14,10 +14,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from asyncio import sleep
-from re import fullmatch, IGNORECASE, escape
+from re import fullmatch, IGNORECASE
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import extract_args, register
+
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
 async def filter_incoming_handler(handler):
@@ -40,6 +41,7 @@ async def filter_incoming_handler(handler):
                 await handler.reply(msg_o.message, file=msg_o.media)
             elif pro and trigger.reply:
                 await handler.reply(trigger.reply)
+
 
 @register(outgoing=True, pattern="^.filter")
 async def add_new_filter(new_handler):
@@ -85,6 +87,7 @@ async def add_new_filter(new_handler):
     else:
         await new_handler.edit(success.format(keyword, 'güncellendi'))
 
+
 @register(outgoing=True, pattern="^.stop")
 async def remove_a_filter(r_handler):
     """ .stop komutu bir filtreyi durdurmanızı sağlar. """
@@ -99,6 +102,7 @@ async def remove_a_filter(r_handler):
     else:
         await r_handler.edit(
             "**{}** `filtresi başarıyla silindi`".format(filt))
+
 
 @register(outgoing=True, pattern="^.rmbotfilters")
 async def kick_marie_filter(event):
@@ -129,6 +133,7 @@ async def kick_marie_filter(event):
         await event.client.send_message(
             BOTLOG_CHATID, "Şu sohbetteki tüm filtreleri temizledim: " + str(event.chat_id))
 
+
 @register(outgoing=True, pattern="^.filters$")
 async def filters_active(event):
     """ .filters komutu bir sohbetteki tüm aktif filtreleri gösterir. """
@@ -148,16 +153,17 @@ async def filters_active(event):
 
     await event.edit(transact)
 
+
 CMD_HELP.update({
     "filter":
-    ".filters\
-    \nKullanım: Bir sohbetteki tüm userbot filtrelerini listeler.\
-    \n\n.filter <filtrelenecek kelime> <cevaplanacak metin> ya da bir mesajı .filter <filtrelenecek kelime>\
-    \nKullanım: 'filtrelenecek kelime' olarak istenilen şeyi kaydeder.\
-    \nBot her 'filtrelenecek kelime' yi algıladığında o mesaja cevap verecektir.\
-    \nDosyalardan çıkartmalara her türlü şeyle çalışır.\
-    \n\n.stop <filtre>\
-    \nKullanım: Seçilen filtreyi durdurur.\
-    \n\n.rmbotfilters <marie/rose>\
-    \nKullanım: Grup yönetimi botlarındaki tüm filtreleri temizler. (Şu anlık Rose, Marie ve Marie klonları destekleniyor.)"
+        ".filters\
+        \nKullanım: Bir sohbetteki tüm userbot filtrelerini listeler.\
+        \n\n.filter <filtrelenecek kelime> <cevaplanacak metin> ya da bir mesajı .filter <filtrelenecek kelime>\
+        \nKullanım: 'filtrelenecek kelime' olarak istenilen şeyi kaydeder.\
+        \nBot her 'filtrelenecek kelime' yi algıladığında o mesaja cevap verecektir.\
+        \nDosyalardan çıkartmalara her türlü şeyle çalışır.\
+        \n\n.stop <filtre>\
+        \nKullanım: Seçilen filtreyi durdurur.\
+        \n\n.rmbotfilters <marie/rose>\
+        \nKullanım: Grup yönetimi botlarındaki tüm filtreleri temizler. (Şu anlık Rose, Marie ve Marie klonları destekleniyor.)"
 })

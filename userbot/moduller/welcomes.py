@@ -18,6 +18,7 @@ from telethon.events import ChatAction
 from userbot import CMD_HELP, bot, LOGS, CLEAN_WELCOME, BOTLOG_CHATID
 from userbot.events import extract_args, register
 
+
 @bot.on(ChatAction)
 async def welcome_to_chat(event):
     try:
@@ -32,7 +33,7 @@ async def welcome_to_chat(event):
         user_left=False,
         user_kicked=False"""
         if (event.user_joined
-                or event.user_added) and not (await event.get_user()).bot:
+            or event.user_added) and not (await event.get_user()).bot:
             if CLEAN_WELCOME:
                 try:
                     await event.client.delete_messages(event.chat_id,
@@ -90,6 +91,7 @@ async def welcome_to_chat(event):
                 file=file_media)
             update_previous_welcome(event.chat_id, current_message.id)
 
+
 @register(outgoing=True, pattern=r"^.setwelcome")
 async def save_welcome(event):
     try:
@@ -127,6 +129,7 @@ async def save_welcome(event):
     else:
         await event.edit(success.format('güncellendi'))
 
+
 @register(outgoing=True, pattern="^.checkwelcome")
 async def show_welcome(event):
     try:
@@ -149,6 +152,7 @@ async def show_welcome(event):
             "`Şu anda bu karşılama notu ile yeni kullanıcıları ağırlıyorum.`")
         await event.reply(cws.reply)
 
+
 @register(outgoing=True, pattern="^.rmwelcome")
 async def del_welcome(event):
     try:
@@ -161,16 +165,17 @@ async def del_welcome(event):
     else:
         await event.edit("`Burada karşılama notu var mı ?`")
 
+
 CMD_HELP.update({
     "welcome":
-    "\
-.setwelcome <karışlama mesajı> veya .setwelcome ile bir mesaja cevap verin\
-\nKullanım: Mesajı sohbete karşılama notu olarak kaydeder.\
-\n\nKarşılama mesajlarını biçimlendirmek için kullanılabilir değişkenler :\
-\n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
-\n\n.checkwelcome\
-\nKullanım: Sohbette karşılama notu olup olmadığını kontrol edin.\
-\n\n.rmwelcome\
-\nKullanım: Geçerli sohbet için karşılama notunu siler.\
-"
+        "\
+    .setwelcome <karışlama mesajı> veya .setwelcome ile bir mesaja cevap verin\
+    \nKullanım: Mesajı sohbete karşılama notu olarak kaydeder.\
+    \n\nKarşılama mesajlarını biçimlendirmek için kullanılabilir değişkenler :\
+    \n`{mention}, {title}, {count}, {first}, {last}, {fullname}, {userid}, {username}, {my_first}, {my_fullname}, {my_last}, {my_mention}, {my_username}`\
+    \n\n.checkwelcome\
+    \nKullanım: Sohbette karşılama notu olup olmadığını kontrol edin.\
+    \n\n.rmwelcome\
+    \nKullanım: Geçerli sohbet için karşılama notunu siler.\
+    "
 })

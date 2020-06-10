@@ -19,6 +19,7 @@ from telethon.tl.types import ChatBannedRights
 from userbot import CMD_HELP
 from userbot.events import extract_args, register
 
+
 @register(outgoing=True, pattern=r"^.lock")
 async def locks(event):
     input_str = extract_args(event).lower()
@@ -105,6 +106,7 @@ async def locks(event):
         await event.edit(
             f"`Bunun için gerekli haklara sahip olduğuna emin misin?`\n**Hata:** {str(e)}")
         return
+
 
 @register(outgoing=True, pattern=r"^.unlock")
 async def rem_locks(event):
@@ -193,11 +195,12 @@ async def rem_locks(event):
             f"`Bunun için gerekli haklara sahip misin?`\n**Hata:** {str(e)}")
         return
 
+
 CMD_HELP.update({
     "locks":
-    ".lock <kilitlenecek medya tipi> veya .unlock <kilitlenecek medya tipi>\
-\nKullanım: Sohbetteki birtakım şeyleri engelleyebilmeni sağlar. (sticker atmak, oyun oynamak vs.)\
-[Not: Yönetici hakları gerektirir!]\
-\n\nKilitleyebileceğin ve kilidini açabileceklerin şunlardır: \
-\n`all, msg, media, sticker, gif, game, inline, poll, invite, pin, info`"
+        ".lock <kilitlenecek medya tipi> veya .unlock <kilitlenecek medya tipi>\
+    \nKullanım: Sohbetteki birtakım şeyleri engelleyebilmeni sağlar. (sticker atmak, oyun oynamak vs.)\
+    [Not: Yönetici hakları gerektirir!]\
+    \n\nKilitleyebileceğin ve kilidini açabileceklerin şunlardır: \
+    \n`all, msg, media, sticker, gif, game, inline, poll, invite, pin, info`"
 })

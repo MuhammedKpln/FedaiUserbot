@@ -13,12 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-import os
 import asyncio
+import os
 import random
 import shutil
-
 from datetime import datetime
+
 from PIL import Image, ImageDraw, ImageFont
 from requests import get
 from telethon.tl import functions
@@ -26,6 +26,7 @@ from telethon.tl.types import InputMessagesFilterDocument
 
 from userbot import CMD_HELP, AUTO_PP, ASYNC_POOL, me, LOGS
 from userbot.events import register, extract_args
+
 
 @register(outgoing=True, pattern="^.autopp")
 async def autopic(event):
@@ -61,9 +62,9 @@ async def autopic(event):
                 load.write(get(AUTO_PP).content)
         else:
             try:
-                await event.client.download_profile_photo(me.id, 
-                        downloaded_file_name, 
-                        download_big=True)
+                await event.client.download_profile_photo(me.id,
+                                                          downloaded_file_name,
+                                                          download_big=True)
             except:
                 await event.edit('`Lütfen AUTO_PP değişkeninizi ayarlayın veya bir profil fotoğrafı koyun.`')
                 return
@@ -81,7 +82,7 @@ async def autopic(event):
         fnt = ImageFont.truetype(FONT_FILE_TO_USE, 70)
         size = drawn_text.multiline_textsize(current_time, font=fnt)
         drawn_text.text(((img.width - size[0]) / 2, (img.height - size[1])),
-                       current_time, font=fnt, fill=(255, 255, 255))
+                        current_time, font=fnt, fill=(255, 255, 255))
         img.save(photo)
         file = await event.client.upload_file(photo)  # pylint:disable=E0602
         try:
@@ -92,6 +93,7 @@ async def autopic(event):
             await asyncio.sleep(60)
         except:
             return
+
 
 async def get_font_file(client, channel_id):
     # Önce yazı tipi mesajlarını al
@@ -108,10 +110,11 @@ async def get_font_file(client, channel_id):
     # Dosya yolunu indir ve geri dön
     return await client.download_media(font_file_message)
 
+
 CMD_HELP.update({
-    "autopp": 
-    ".autopp <disable> \
-    \nKullanım: Bu komut belirlediğiniz fotoğrafı profil resmi yapar \
-    \nve bir saat ekler. Bu saat her dakika değişir. \
-    \nNOT: Küçük bir ihtimal bile olsa ban yeme riskiniz var. Bu yüzden dikkatli kullanın."
+    "autopp":
+        ".autopp <disable> \
+        \nKullanım: Bu komut belirlediğiniz fotoğrafı profil resmi yapar \
+        \nve bir saat ekler. Bu saat her dakika değişir. \
+        \nNOT: Küçük bir ihtimal bile olsa ban yeme riskiniz var. Bu yüzden dikkatli kullanın."
 })

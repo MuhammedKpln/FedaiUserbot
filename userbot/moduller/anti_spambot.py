@@ -14,12 +14,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from asyncio import sleep
-from requests import get
 
+from requests import get
 from telethon.events import ChatAction
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, ANTI_SPAMBOT, ANTI_SPAMBOT_SHOUT, bot
+
 
 @bot.on(ChatAction)
 async def anti_spambot(welcm):
@@ -124,7 +125,7 @@ async def anti_spambot(welcm):
                                                      "Information", "Dex",
                                                      "Announcements", "Info",
                                                      "Duyuru", "Duyurular"
-                                                     "Bilgilendirme", "Bilgilendirmeler"):
+                                                               "Bilgilendirme", "Bilgilendirmeler"):
                             if check_user.last_name == "Bot":
                                 reason = "Bilinen SpamBot"
                                 spambot = True
@@ -178,18 +179,19 @@ async def anti_spambot(welcm):
                     if kicked or reported:
                         await welcm.client.send_message(
                             BOTLOG_CHATID, "#ANTI_SPAMBOT RAPORU\n"
-                            f"Kullanıcı: [{check_user.first_name}](tg://user?id={check_user.id})\n"
-                            f"Kullanıcı IDsi: `{check_user.id}`\n"
-                            f"Sohbet: {welcm.chat.title}\n"
-                            f"Sohbet IDsi: `{welcm.chat_id}`\n"
-                            f"Sebep: {reason}\n"
-                            f"Mesaj:\n\n{message.text}")
+                                           f"Kullanıcı: [{check_user.first_name}](tg://user?id={check_user.id})\n"
+                                           f"Kullanıcı IDsi: `{check_user.id}`\n"
+                                           f"Sohbet: {welcm.chat.title}\n"
+                                           f"Sohbet IDsi: `{welcm.chat_id}`\n"
+                                           f"Sebep: {reason}\n"
+                                           f"Mesaj:\n\n{message.text}")
     except ValueError:
         pass
 
+
 CMD_HELP.update({
     'anti_spambot':
-    "Kullanım: Bu modül config.env dosyasında ya da env değeri ile etkinleştirilmişse,\
-        \neğer bu spamcılar UserBot'un anti-spam algoritmasıyla eşleşiyorsa, \
-        \nbu modül gruptaki spamcıları gruptan yasaklar (ya da adminlere bilgi verir)."
+        "Kullanım: Bu modül config.env dosyasında ya da env değeri ile etkinleştirilmişse,\
+            \neğer bu spamcılar UserBot'un anti-spam algoritmasıyla eşleşiyorsa, \
+            \nbu modül gruptaki spamcıları gruptan yasaklar (ya da adminlere bilgi verir)."
 })

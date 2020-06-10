@@ -17,13 +17,13 @@ import io
 import math
 import random
 import urllib.request
-
 from os import remove
+
 from PIL import Image
-from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 from telethon.tl.functions.messages import GetStickerSetRequest
-from telethon.tl.types import InputStickerSetID
+from telethon.tl.types import DocumentAttributeFilename, MessageMediaPhoto
 from telethon.tl.types import DocumentAttributeSticker
+from telethon.tl.types import InputStickerSetID
 
 from userbot import bot, CMD_HELP
 from userbot.events import register
@@ -40,6 +40,7 @@ DIZCILIK_STR = [
     "Çıkartma hapsediliyor...",
     "Bay dızcı bu çıkartmayı dızlıyor... ",
 ]
+
 
 @register(outgoing=True, pattern="^.dızla")
 async def dizla(args):
@@ -272,6 +273,7 @@ async def resize_photo(photo):
 
     return image
 
+
 @register(outgoing=True, pattern="^.dızbilgisi")
 async def dizbilgisi(event):
     if not event.is_reply:
@@ -306,24 +308,25 @@ async def dizbilgisi(event):
             pack_emojis.append(document_sticker.emoticon)
 
     OUTPUT = f"**Sticker başlığı:** `{get_stickerset.set.title}\n`" \
-        f"**Sticker kısa adı:** `{get_stickerset.set.short_name}`\n" \
-        f"**Resmi mi:** `{get_stickerset.set.official}`\n" \
-        f"**Arşivlenmiş mi:** `{get_stickerset.set.archived}`\n" \
-        f"**Paketteki çıkartma sayısı:** `{len(get_stickerset.packs)}`\n" \
-        f"**Paketteki emoji sayısı:**\n{' '.join(pack_emojis)}"
+             f"**Sticker kısa adı:** `{get_stickerset.set.short_name}`\n" \
+             f"**Resmi mi:** `{get_stickerset.set.official}`\n" \
+             f"**Arşivlenmiş mi:** `{get_stickerset.set.archived}`\n" \
+             f"**Paketteki çıkartma sayısı:** `{len(get_stickerset.packs)}`\n" \
+             f"**Paketteki emoji sayısı:**\n{' '.join(pack_emojis)}"
 
     await event.edit(OUTPUT)
 
+
 CMD_HELP.update({
     "stickers":
-    ".dızla\
-\nKullanım: .dızla ile bir çıkartmaya ya da resme yanıtlayarak kendi çıkartma paketinize çıkartma olarak ekleyebilirsiniz.\
-\n\n.dızla [emoji(ler)]\
-\nKullanım: .dızla gibi çalışır fakat istediğiniz emojiyi çıkartmanın emojisi olarak belirtir.\
-\n\n.dızla [numara]\
-\nKullanım: Çıkartmayı ya da resmi belirtilen pakete ekler fakat emoji olarak şu kullanılır: 🤔 \
-\n\n.dızla [emoji(ler)] [numara]\
-\nKullanım: Çıkartmayı ya da resmi belirtilen pakete ekler ve belirttiğiniz emoji çıkartmanın emojisi olarak kullanılır.\
-\n\n.dızbilgisi\
-\nKullanım: Çıkartma paketi hakkında bilgi verir."
+        ".dızla\
+    \nKullanım: .dızla ile bir çıkartmaya ya da resme yanıtlayarak kendi çıkartma paketinize çıkartma olarak ekleyebilirsiniz.\
+    \n\n.dızla [emoji(ler)]\
+    \nKullanım: .dızla gibi çalışır fakat istediğiniz emojiyi çıkartmanın emojisi olarak belirtir.\
+    \n\n.dızla [numara]\
+    \nKullanım: Çıkartmayı ya da resmi belirtilen pakete ekler fakat emoji olarak şu kullanılır: 🤔 \
+    \n\n.dızla [emoji(ler)] [numara]\
+    \nKullanım: Çıkartmayı ya da resmi belirtilen pakete ekler ve belirttiğiniz emoji çıkartmanın emojisi olarak kullanılır.\
+    \n\n.dızbilgisi\
+    \nKullanım: Çıkartma paketi hakkında bilgi verir."
 })

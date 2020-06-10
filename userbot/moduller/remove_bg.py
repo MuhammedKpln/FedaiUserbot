@@ -16,12 +16,13 @@
 
 import io
 import os
-import requests
 
+import requests
 from telethon.tl.types import MessageMediaPhoto
 
-from userbot.events import extract_args, register
 from userbot import CMD_HELP, REM_BG_API_KEY, TEMP_DOWNLOAD_DIRECTORY
+from userbot.events import extract_args, register
+
 
 @register(outgoing=True, pattern="^.rbg")
 async def kbg(remob):
@@ -102,8 +103,9 @@ async def ReTrieveURL(input_url):
                       stream=True)
     return r
 
+
 CMD_HELP.update({
     "rbg":
-    ".rbg <Resim bağlantısı> veya herhangi bir görüntüye cevap verin (Uyarı: çıkartmalar üzerinde çalışmaz.)\
-\nKullanım: remove.bg API kullanarak görüntülerin arka planını kaldırır."
+        ".rbg <Resim bağlantısı> veya herhangi bir görüntüye cevap verin (Uyarı: çıkartmalar üzerinde çalışmaz.)\
+    \nKullanım: remove.bg API kullanarak görüntülerin arka planını kaldırır."
 })

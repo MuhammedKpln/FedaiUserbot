@@ -14,14 +14,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from userbot.events import extract_args, register
 import importlib
-import re
 import os
+import re
 import time
+
 from telethon.tl.types import DocumentAttributeFilename, InputMessagesFilterDocument
+
 from userbot import CMD_HELP, PLUGIN_CHANNEL_ID, bot
-from asyncio import sleep
+from userbot.events import extract_args, register
 
 
 @register(outgoing=True, pattern="^.pkur")
@@ -39,7 +40,8 @@ async def pins(event):
     if PLUGIN_CHANNEL_ID != None:
         await reply_message.forward_to(PLUGIN_CHANNEL_ID)
     else:
-        event.reply("`Pluginlerin kalıcı olması için Id ayarlamamışsınız. Pluginleriniz yeniden başlatınca silinebilir!`")
+        event.reply(
+            "`Pluginlerin kalıcı olması için Id ayarlamamışsınız. Pluginleriniz yeniden başlatınca silinebilir!`")
 
     try:
         spec = importlib.util.spec_from_file_location(dosya, dosya)
@@ -108,13 +110,14 @@ async def plist(event):
     else:
         await event.edit("`Pluginleriniz kalıcı yüklenmiyor bu yüzden liste getiremem.`")
 
+
 @register(outgoing=True, pattern="^.phepsinikur")
 async def pinstallall(event):
     PLUGINS_TO_BE_INSTALLED = []
     if PLUGIN_CHANNEL_ID != None:
         await event.edit("`Pluginler getiriliyor...`")
         async for plugin in event.client.iter_messages(PLUGIN_CHANNEL_ID, filter=InputMessagesFilterDocument):
-            
+
             raw_name = plugin.file.name
             file_name = str(plugin.file.name).strip('.')[0]
             modules_folder = os.getcwd() + "/userbot/moduller/"
@@ -137,11 +140,10 @@ async def pinstallall(event):
     else:
         await event.edit("`Pluginleriniz kalıcı yüklenmiyor bu yüzden işlem iptal edildi.`")
 
+
 async def installPlugins():
     async for plugin in bot.iter_messages(PLUGIN_CHANNEL_ID, search="{KURBUNU}"):
         pins
-
-
 
 
 @register(outgoing=True, pattern="^.psil ?(.*)")

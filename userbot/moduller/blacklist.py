@@ -13,17 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+import asyncio
 import io
 import re
-import asyncio
+from importlib import import_module
 
-from telethon import events, utils
-from telethon.tl import types, functions
-
-from userbot import CMD_HELP, bot, LOGS
+from userbot import CMD_HELP, LOGS
 from userbot.events import extract_args, register
 
-from importlib import import_module
 
 async def blacklist_init():
     try:
@@ -33,7 +30,9 @@ async def blacklist_init():
         sql = None
         LOGS.warn('Karaliste özelliği çalıştırılamıyor, SQL bağlantısı bulunamadı')
 
+
 asyncio.run(blacklist_init())
+
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
 async def on_new_message(event):
@@ -52,6 +51,7 @@ async def on_new_message(event):
             break
         pass
 
+
 @register(outgoing=True, pattern="^.addblacklist")
 async def on_add_black_list(addbl):
     if not sql:
@@ -62,6 +62,7 @@ async def on_add_black_list(addbl):
     for trigger in to_blacklist:
         sql.add_to_blacklist(addbl.chat_id, trigger.lower())
     await addbl.edit("{} **adet kelime bu sohbet için karalisteye alındı.**".format(len(to_blacklist)))
+
 
 @register(outgoing=True, pattern="^.showblacklist")
 async def on_view_blacklist(listbl):
@@ -90,6 +91,7 @@ async def on_view_blacklist(listbl):
     else:
         await listbl.edit(OUT_STR)
 
+
 @register(outgoing=True, pattern="^.rmblacklist")
 async def on_delete_blacklist(rmbl):
     if not sql:
@@ -102,15 +104,16 @@ async def on_delete_blacklist(rmbl):
         if sql.rm_from_blacklist(rmbl.chat_id, trigger.lower()):
             successful += 1
     await rmbl.edit(f"**Kelime karalisteden kaldırıldı.**")
-    
+
+
 CMD_HELP.update({
     "blacklist":
-    ".showblacklist\
-    \nKullanım: Bir sohbetteki etkin kara listeyi listeler.\
-    \n\n.addblacklist <kelime>\
-    \nKullanım: İletiyi 'kara liste anahtar kelimesine' kaydeder.\
-    \n'Kara liste anahtar kelimesinden' bahsedildiğinde bot iletiyi siler.\
-    \n\n.rmblacklist <kelime>\
-    \nKullanım: Belirtilen kara listeyi durdurur.\
-    \nBu arada bu işlemleri gerçekleştirmek için yönetici olmalı ve **Mesaj Silme** yetkiniz olmalı."
+        ".showblacklist\
+        \nKullanım: Bir sohbetteki etkin kara listeyi listeler.\
+        \n\n.addblacklist <kelime>\
+        \nKullanım: İletiyi 'kara liste anahtar kelimesine' kaydeder.\
+        \n'Kara liste anahtar kelimesinden' bahsedildiğinde bot iletiyi siler.\
+        \n\n.rmblacklist <kelime>\
+        \nKullanım: Belirtilen kara listeyi durdurur.\
+        \nBu arada bu işlemleri gerçekleştirmek için yönetici olmalı ve **Mesaj Silme** yetkiniz olmalı."
 })

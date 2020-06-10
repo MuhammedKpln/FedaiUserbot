@@ -15,10 +15,9 @@
 #
 from asyncio import sleep
 
-from telethon.errors import rpcbaseerrors
-
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import extract_args, register
+
 
 @register(outgoing=True, pattern="^.purge$")
 async def fastpurger(purg):
@@ -28,7 +27,7 @@ async def fastpurger(purg):
     itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
     count = 0
 
-    if purg.reply_to_msg_id :
+    if purg.reply_to_msg_id:
         async for msg in itermsg:
             msgs.append(msg)
             count = count + 1
@@ -52,6 +51,7 @@ async def fastpurger(purg):
             "Hedeflenen " + str(count) + " mesaj başarıyla silindi.")
     await sleep(2)
     await done.delete()
+
 
 @register(outgoing=True, pattern="^.purgeme")
 async def purgeme(delme):
@@ -81,6 +81,7 @@ async def purgeme(delme):
     i = 1
     await smsg.delete()
 
+
 @register(outgoing=True, pattern="^.del$")
 async def delete_it(delme):
     """ .del komutu yanıtlanan mesajı siler. """
@@ -96,6 +97,7 @@ async def delete_it(delme):
             if BOTLOG:
                 await delme.client.send_message(
                     BOTLOG_CHATID, "Bu mesajı silemiyorum.")
+
 
 @register(outgoing=True, pattern="^.edit")
 async def editer(edit):
@@ -115,6 +117,7 @@ async def editer(edit):
         await edit.client.send_message(BOTLOG_CHATID,
                                        "Mesaj düzenleme sorgusu başarıyla yürütüldü")
 
+
 @register(outgoing=True, pattern="^.sd")
 async def selfdestruct(destroy):
     """ .sd komutu kendi kendine yok edilebilir mesajlar yapar. """
@@ -133,16 +136,17 @@ async def selfdestruct(destroy):
         await destroy.client.send_message(BOTLOG_CHATID,
                                           "sd sorgusu başarıyla tamamlandı")
 
+
 CMD_HELP.update({
     'purge':
-    '.purge\
-        \nKullanım: Hedeflenen yanıttan başlayarak tüm mesajları temizler.'
+        '.purge\
+            \nKullanım: Hedeflenen yanıttan başlayarak tüm mesajları temizler.'
 })
 
 CMD_HELP.update({
     'purgeme':
-    '.purgeme <x>\
-        \nKullanım: Hedeflenen yanıttan başlayarak tüm mesajları temizler.'
+        '.purgeme <x>\
+            \nKullanım: Hedeflenen yanıttan başlayarak tüm mesajları temizler.'
 })
 
 CMD_HELP.update({"del": ".del\
@@ -150,13 +154,13 @@ CMD_HELP.update({"del": ".del\
 
 CMD_HELP.update({
     'edit':
-    ".edit <yenimesaj>\
-\nKullanım: Son mesajanızı <yenimesaj> ile değiştirin."
+        ".edit <yenimesaj>\
+    \nKullanım: Son mesajanızı <yenimesaj> ile değiştirin."
 })
 
 CMD_HELP.update({
     'sd':
-    '.sd <x> <mesaj>\
-\nKullanım: x saniye içinde kendini yok eden bir mesaj oluşturur.\
-\nBotunuzu uyku moduna geçirdiğinden, saniyeleri 100 ün altında tutun.'
+        '.sd <x> <mesaj>\
+    \nKullanım: x saniye içinde kendini yok eden bir mesaj oluşturur.\
+    \nBotunuzu uyku moduna geçirdiğinden, saniyeleri 100 ün altında tutun.'
 })

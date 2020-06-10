@@ -14,21 +14,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from userbot.events import register, extract_args
-from userbot import bot, LOGS
-import asyncio
-from telethon import functions, types, events
-from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest, GetStatusesRequest
-from telethon.tl.types import UserStatusOnline, UserStatusRecently, ChannelParticipantsRecent
 from asyncio import sleep
+
 from telethon.tl.functions.channels import InviteToChannelRequest
-from telethon.tl.functions.messages import AddChatUserRequest, DeleteChatUserRequest
+from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest
+from telethon.tl.types import ChannelParticipantsRecent
+
+from userbot import bot, LOGS
+from userbot.events import register, extract_args
 
 stopPullingUsers = False
 
+
 @register(outgoing=True, pattern=".sa")
 async def _(event):
-
     global stopPullingUsers
     await event.edit('Merhabalar herkese')
     args = extract_args(event).split(' ')
@@ -37,11 +36,10 @@ async def _(event):
 
     sleepAfterAwhile = []
     async for user in event.client.iter_participants(event.chat_id, limit=int(limit), filter=ChannelParticipantsRecent):
-        
+
         if stopPullingUsers:
             break
-        
-        
+
         if not user.bot and not user.contact and not user.is_self:
             print(user.first_name)
             try:
@@ -53,8 +51,7 @@ async def _(event):
                     add_phone_privacy_exception=False
                 ))
                 sleepAfterAwhile.append(user)
-                
-                
+
                 if len(sleepAfterAwhile) > 4:
                     if notifyUser:
                         await _sendMessageToMainAccount(sleepAfterAwhile)
@@ -66,7 +63,8 @@ async def _(event):
                 LOGS.error(err)
                 _sendMessageToMainAccount(user, str(err))
 
-async def _sendMessageToMainAccount(users, message = ''):
+
+async def _sendMessageToMainAccount(users, message=''):
     msg = message
     if not message:
         msg = ' , '.join(f'@{user.username}' or user.first_name for user in users) + ' Dizladimm...'
@@ -121,4 +119,3 @@ async def contactsCount(event):
     except Exception as e:
         await event.edit('`Bilinmeyen hata ile karsilastik..`')
         LOGS.exception(e)
-        

@@ -25,9 +25,9 @@ from telethon.utils import get_input_location
 from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import extract_args, register
 
+
 @register(pattern="^.whois", outgoing=True)
 async def who(event):
-
     await event.edit(
         "`*Global Network Zone* ' dan bazı verileri çalarken sıkı durun...`")
 
@@ -80,7 +80,7 @@ async def get_user(event):
             self_user = await event.client.get_me()
             user = self_user.id
 
-        if event.message.entities :
+        if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
@@ -154,8 +154,9 @@ async def fetch_info(replied_user, event):
 
     return photo, caption
 
+
 CMD_HELP.update({
     "whois":
-    ".whois <kullanıcı adı> veya .whois komutu ile birinin metnine cevap verin.\
-    \nKullanım: Kullanıcının bilgilerini alır."
+        ".whois <kullanıcı adı> veya .whois komutu ile birinin metnine cevap verin.\
+        \nKullanım: Kullanıcının bilgilerini alır."
 })

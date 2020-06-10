@@ -13,13 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-import time
 import threading
 from pprint import pprint
-
 from re import sub
-
-from asyncio import wait, sleep
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import extract_args, extract_args_arr, register
@@ -40,27 +36,21 @@ async def add_new_spam(e):
     print(await bot.iter_participants(chat, 40))
     # print(await e.client.iter_participants)
 
-
     spamEvent = extract_args(e).split(' ')
 
     if len(spamEvent) < 2:
         await e.edit('`Doğru kullanım: .savespam spamİsmi atılacakSpam`')
         return
-       
+
     spamName = spamEvent[0]
     spam = spamEvent[1]
 
     saveSpam = add_spam(spamName, spam)
-    pprint( add_spam(spamName, spam))
+    pprint(add_spam(spamName, spam))
     if saveSpam:
         await e.edit('Yeni spam başarılı bir şekilde eklendii.')
     else:
         await e.edit('`Yeni spam eklenirker bir hata meydana geldi!`')
-
-
-
-
-
 
 
 @register(outgoing=True, pattern="^.tspam")
@@ -70,14 +60,15 @@ async def tmeme(e):
         await e.edit("`Bir şeyler eksik/yanlış gibi görünüyor.`")
         return
     await e.delete()
-    for letter in message.replace(' ',''):
+    for letter in message.replace(' ', ''):
         await e.respond(letter)
     if BOTLOG:
-            await e.client.send_message(
-                BOTLOG_CHATID,
-                "#TSPAM \n\n"
-                "TSpam başarıyla gerçekleştirildi"
-                )
+        await e.client.send_message(
+            BOTLOG_CHATID,
+            "#TSPAM \n\n"
+            "TSpam başarıyla gerçekleştirildi"
+        )
+
 
 @register(outgoing=True, pattern="^.spam")
 async def bigspam(e):
@@ -91,15 +82,16 @@ async def bigspam(e):
         return
     await e.delete()
     counter = int(arr[0])
-    spam_message = message.replace(arr[0],'').strip()
+    spam_message = message.replace(arr[0], '').strip()
     for i in range(0, counter):
         await e.respond(spam_message)
     if BOTLOG:
-         await e.client.send_message(
-             BOTLOG_CHATID,
-             "#BIGSPAM \n\n"
-             "Bigspam başarıyla gerçekleştirildi"
-            )
+        await e.client.send_message(
+            BOTLOG_CHATID,
+            "#BIGSPAM \n\n"
+            "Bigspam başarıyla gerçekleştirildi"
+        )
+
 
 @register(outgoing=True, pattern="^.picspam")
 async def tiny_pic_spam(e):
@@ -117,7 +109,8 @@ async def tiny_pic_spam(e):
             BOTLOG_CHATID,
             "#PICSPAM \n\n"
             "PicSpam başarıyla gerçekleştirildi"
-            )
+        )
+
 
 @register(outgoing=True, pattern="^.delayspam")
 async def delayspammer(e):
@@ -140,8 +133,9 @@ async def delayspammer(e):
             BOTLOG_CHATID,
             "#DelaySPAM \n\n"
             "DelaySpam başarıyla gerçekleştirildi"
-            )
-                               
+        )
+
+
 CMD_HELP.update({
     "spammer": ".tspam <metin>\
 \nKullanım: Verilen mesajı tek tek göndererek spam yapar\

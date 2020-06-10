@@ -14,19 +14,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import time
-import requests
-
-from collections import deque
-from asyncio import sleep
-from random import choice, getrandbits, randint
-from re import sub
-from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from userbot.moduller.admin import get_user_from_event
 from userbot import CMD_HELP, bot
 from userbot.events import register
+
 
 @register(outgoing=True, pattern="^.tagall")
 async def _(event):
@@ -41,6 +33,7 @@ async def _(event):
             leng += 1
     await event.reply(mentions)
     await event.delete()
+
 
 @register(outgoing=True, pattern="^.admn")
 async def _(event):
@@ -58,9 +51,10 @@ async def _(event):
         await event.reply(mentions)
     await event.delete()
 
+
 CMD_HELP.update({
     "tagall":
-    ".tagall\
-    \nKullanım: Bu komutu kullandığınızda sohbet içerisinde ki herkesi etiketler.\n\n.admn \
-    \nKullanım: Bu komutu kullandığınızda sohbet içerisinde ki yöneticileri etiketler."
+        ".tagall\
+        \nKullanım: Bu komutu kullandığınızda sohbet içerisinde ki herkesi etiketler.\n\n.admn \
+        \nKullanım: Bu komutu kullandığınızda sohbet içerisinde ki yöneticileri etiketler."
 })

@@ -14,15 +14,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+from asyncio import sleep
 from io import BytesIO
-from sys import executable, argv
-
 from os import execl
 from random import randint
-from asyncio import sleep
+from sys import executable, argv
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import extract_args, register, me
+
 
 @register(outgoing=True, pattern="^.random")
 async def randomise(items):
@@ -36,6 +36,7 @@ async def randomise(items):
     index = randint(1, len(itemo) - 1)
     await items.edit("**Sorgu: **\n`" + items.text[8:] + "`\n**Çıktı: **\n`" +
                      itemo[index] + "`")
+
 
 @register(outgoing=True, pattern="^.sleep")
 async def sleepybot(time):
@@ -55,22 +56,24 @@ async def sleepybot(time):
         await sleep(counter)
         await time.edit("`Günaydın!`")
 
+
 @register(outgoing=True, pattern="^.shutdown$")
 async def shutdown(event):
     """ .shutdown komutu botu kapatır. """
     await event.edit("`Görüşürüz... *Windows XP kapanma sesi*`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \n"
-                                        "Bot kapatıldı.")
+                                                       "Bot kapatıldı.")
     try:
         await bot.disconnect()
     except:
         pass
 
+
 @register(outgoing=True, pattern=".alive")
 async def alive(event):
-        DEFAULTUSER =  me.first_name
-        await event.edit("**İSTATİSTİKLERİM** \n` ŞUAN :` **✅ ÇALIŞIYORUM **\n\n"
+    DEFAULTUSER = me.first_name
+    await event.edit("**İSTATİSTİKLERİM** \n` ŞUAN :` **✅ ÇALIŞIYORUM **\n\n"
                      "`TELETHON VERSİYONU:` **6.0.9**\n`Python:` **3.7.4**\n"
                      "`VERİTABANİ:` **HERŞEY YOLUNDA 🙂**\n`HİÇ BİR PROBLEM BULUNMADI🔥!\n`"
                      "`DEPLOY SERVİSİ: HEROKU INC.\n"
@@ -81,14 +84,14 @@ async def alive(event):
                      f"`PATRONUM`: {DEFAULTUSER}\n\n"
                      "`UYDU DURUMU: ✅ UYGUN\n\n"
                      "[⚡ PATRONUM OLMAYA NE DERSİN?⚡](https://t.me/FedaiUserBotSupport)")
-    
+
 
 @register(outgoing=True, pattern="^.restart$")
 async def restart(event):
     await event.edit("`Bot yeniden başlatılıyor...`")
     if BOTLOG:
         await event.client.send_message(BOTLOG_CHATID, "#RESTART \n"
-                                        "Bot yeniden başlatıldı.")
+                                                       "Bot yeniden başlatıldı.")
 
     try:
         await bot.disconnect()
@@ -97,10 +100,12 @@ async def restart(event):
 
     execl(executable, executable, *argv)
 
+
 @register(outgoing=True, pattern="^.support$")
 async def bot_support(wannahelp):
     """ .support komutu destek grubumuzu verir. """
     await wannahelp.edit("[Buradan](http://t.me/FedaiUserBotSupport) destek grubumuza ulaşabilirsiniz.")
+
 
 @register(outgoing=True, pattern="^.creator$")
 async def creator(e):
@@ -109,9 +114,11 @@ async def creator(e):
                  "[MuhammedKpln](https://t.me/hasanisabbah) tarafından geliştirilip \n"
                  "=========================")
 
+
 @register(outgoing=True, pattern="^.readme$")
 async def reedme(e):
     await e.edit("[Fedai README.md](https://github.com/muhammedkpln/fedaiuserbot/blob/fedai/README.md)")
+
 
 # Copyright (c) Gegham Zakaryan | 2019
 @register(outgoing=True, pattern="^.repeat")
@@ -134,10 +141,12 @@ async def repeat(rep):
 
     await rep.edit(replyText)
 
+
 @register(outgoing=True, pattern="^.repo$")
 async def repo_is_here(wannasee):
     """ .repo komutunun tek yaptığı şey GitHub repomuzun bağlantısını vermek. """
     await wannasee.edit("[Fedai Repo](https://github.com/muhammedkpln/fedaiuserbot)")
+
 
 @register(outgoing=True, pattern="^.raw$")
 async def raw(event):
@@ -162,23 +171,24 @@ async def raw(event):
             reply_to=reply_to_id,
             caption="`Çözülen mesaj`")
 
+
 CMD_HELP.update({
     'random':
-    '.random <eşya1> <eşya2> ... <eşyaN>\
-\nKullanım: Eşya listesinden rastgele bir eşya seçer'
+        '.random <eşya1> <eşya2> ... <eşyaN>\
+    \nKullanım: Eşya listesinden rastgele bir eşya seçer'
 })
 
 CMD_HELP.update({
     'sleep':
-    '.sleep <saniye>\
-\nKullanım: Fedai de bir insan, o da yoruluyor. Ara sıra biraz uyumasına izin ver.'
+        '.sleep <saniye>\
+    \nKullanım: Fedai de bir insan, o da yoruluyor. Ara sıra biraz uyumasına izin ver.'
 })
 
 CMD_HELP.update({
     "shutdown":
-    ".shutdown\
-\nKullanım: Bazen canın botunu kapatmak ister. Gerçekten o nostaljik\
-Windows XP kapanış sesini duyabileceğini zannedersin..."
+        ".shutdown\
+    \nKullanım: Bazen canın botunu kapatmak ister. Gerçekten o nostaljik\
+    Windows XP kapanış sesini duyabileceğini zannedersin..."
 })
 
 CMD_HELP.update(
@@ -188,14 +198,14 @@ CMD_HELP.update(
 
 CMD_HELP.update({
     'repo':
-    '.repo\
-\nKullanım: Fedai UserBot GitHub reposu'
+        '.repo\
+    \nKullanım: Fedai UserBot GitHub reposu'
 })
 
 CMD_HELP.update({
     "readme":
-    ".readme\
-\nKullanım: Fedai botunun GitHub'daki README.md dosyasına giden bir bağlantı."
+        ".readme\
+    \nKullanım: Fedai botunun GitHub'daki README.md dosyasına giden bir bağlantı."
 })
 
 CMD_HELP.update(
@@ -204,8 +214,8 @@ CMD_HELP.update(
 
 CMD_HELP.update({
     "repeat":
-    ".repeat <sayı> <metin>\
-\nKullanım: Bir metni belli bir sayıda tekrar eder. Spam komutu ile karıştırma!"
+        ".repeat <sayı> <metin>\
+    \nKullanım: Bir metni belli bir sayıda tekrar eder. Spam komutu ile karıştırma!"
 })
 
 CMD_HELP.update({"restart": ".restart\
@@ -213,6 +223,6 @@ CMD_HELP.update({"restart": ".restart\
 
 CMD_HELP.update({
     "raw":
-    ".raw\
-\nKullanım: Kullanılan mesaj hakkında JSON'a benzer bir şekilde detaylı bilgiler verir."
+        ".raw\
+    \nKullanım: Kullanılan mesaj hakkında JSON'a benzer bir şekilde detaylı bilgiler verir."
 })

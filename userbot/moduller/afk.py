@@ -13,13 +13,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from random import choice, randint
 from asyncio import sleep
+from random import choice, randint
 
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,
-                     BOTLOG_CHATID, USERS, PM_AUTO_BAN, bot)
+from userbot import (CMD_HELP, BOTLOG,
+                     BOTLOG_CHATID, PM_AUTO_BAN, bot)
 from userbot.events import extract_args, register
 
 # ========================= CONSTANTS ============================
@@ -47,6 +47,8 @@ AFKSTR = [
     "Hayat çok kısa, yapacak çok şey var...\nOnlardan birini yapıyorum...",
     "Şu an burada değilim....\nama öyleysem ...\n\nbu harika olmaz mıydı?",
 ]
+
+
 # =================================================================
 @register(incoming=True, disable_edited=True)
 async def mention_afk(mention):
@@ -77,6 +79,7 @@ async def mention_afk(mention):
                 else:
                     USERS[mention.sender_id] = USERS[mention.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
+
 
 @register(incoming=True, disable_errors=True)
 async def afk_on_pm(sender):
@@ -117,6 +120,7 @@ async def afk_on_pm(sender):
                     USERS[sender.sender_id] = USERS[sender.sender_id] + 1
                     COUNT_MSG = COUNT_MSG + 1
 
+
 @register(outgoing=True, pattern="^.afk", disable_errors=True)
 async def set_afk(afk_e):
     """ .afk komutu siz afk iken insanları afk olduğunuza dair bilgilendirmeye yarar. """
@@ -133,6 +137,7 @@ async def set_afk(afk_e):
         await afk_e.client.send_message(BOTLOG_CHATID, "#AFK\nAFK oldunuz.")
     ISAFK = True
     raise StopPropagation
+
 
 @register(outgoing=True)
 async def type_afk_is_not_true(notafk):
@@ -163,10 +168,11 @@ async def type_afk_is_not_true(notafk):
         USERS = {}
         AFKREASON = None
 
+
 CMD_HELP.update({
     "afk":
-    ".afk [İsteğe bağlı sebep]\
-\nKullanım: AFK olduğunuzu belirtir.\nKim size pm atarsa ya da sizi etiketlerse \
-sizin AFK olduğunuzu ve belirlediğiniz sebebi gösterir.\n\nHerhangi bir yere mesaj yazdığınızda AFK modu kapanır.\
-"
+        ".afk [İsteğe bağlı sebep]\
+    \nKullanım: AFK olduğunuzu belirtir.\nKim size pm atarsa ya da sizi etiketlerse \
+    sizin AFK olduğunuzu ve belirlediğiniz sebebi gösterir.\n\nHerhangi bir yere mesaj yazdığınızda AFK modu kapanır.\
+    "
 })

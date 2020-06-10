@@ -14,12 +14,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from datetime import datetime as dt
+
 from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
 from userbot import CMD_HELP, COUNTRY, TZ_NUMBER
 from userbot.events import extract_args, register
+
 
 async def get_tz(con):
     """ Seçilen bölgenin saat dilimini elde etmek içindir. """
@@ -44,6 +46,7 @@ async def get_tz(con):
             return c_tz[con]
     except KeyError:
         return
+
 
 @register(outgoing=True, pattern="^.time")
 async def time_func(tdata):
@@ -91,7 +94,7 @@ async def time_func(tdata):
             return_str = f"`{c_name} ülkesi birden fazla saat dilimine sahip:`\n\n"
 
             for i, item in enumerate(timezones):
-                return_str += f"`{i+1}. {item}`\n"
+                return_str += f"`{i + 1}. {item}`\n"
 
             return_str += "\n`Şunlardan birini numara belirterek seçin."
             return_str += f"`Örnek: .time {c_name} 2`"
@@ -110,6 +113,7 @@ async def time_func(tdata):
         await tdata.edit(f"{COUNTRY} ülkesinde saat **{dtnow}**  "
                          f"({time_zone} saat diliminde).")
         return
+
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
 async def date_func(dat):
@@ -152,7 +156,7 @@ async def date_func(dat):
             return_str = f"`{c_name} ülkesi birden fazla saat dilimine sahip:`\n"
 
             for i, item in enumerate(timezones):
-                return_str += f"`{i+1}. {item}`\n"
+                return_str += f"`{i + 1}. {item}`\n"
 
             return_str += "\n`Şunlardan birini numara belirterek seçin"
             return_str += f"Örnek: .date {c_name} 2"
@@ -172,17 +176,18 @@ async def date_func(dat):
                        f" ({time_zone} saat diliminde).")
         return
 
+
 CMD_HELP.update({
     "time":
-    ".time <ülke ismi/kodu> <saat dilimi numarası>"
-    "\nKullanım: Bir ülkenin saatini gösterir. Eğer bir ülke "
-    "birden fazla saat dilimine sahipse, tümü birden gösterilir "
-    "ve seçim sana bırakılır."
+        ".time <ülke ismi/kodu> <saat dilimi numarası>"
+        "\nKullanım: Bir ülkenin saatini gösterir. Eğer bir ülke "
+        "birden fazla saat dilimine sahipse, tümü birden gösterilir "
+        "ve seçim sana bırakılır."
 })
 CMD_HELP.update({
     "date":
-    ".date <ülke ismi/kodu> <saat dilimi numarası>"
-    "\nKullanım: Bir ülkenin tarihini gösterir. Eğer bir ülke"
-    "birden fazla saat dilimine sahipse, tümü birden gösterilir."
-    "ve seçim sana bırakılır."
+        ".date <ülke ismi/kodu> <saat dilimi numarası>"
+        "\nKullanım: Bir ülkenin tarihini gösterir. Eğer bir ülke"
+        "birden fazla saat dilimine sahipse, tümü birden gösterilir."
+        "ve seçim sana bırakılır."
 })

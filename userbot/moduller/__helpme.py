@@ -14,7 +14,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from userbot import CMD_HELP, BOT_USERNAME
+from userbot import BOT_USERNAME
 from userbot.events import register
 
 @register(outgoing=True, pattern="^.yardım")

@@ -14,13 +14,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import re
-
 from sre_constants import error as sre_err
 
 from userbot import CMD_HELP
 from userbot.events import register
 
 DELIMITERS = ("/", ":", "|", "_")
+
 
 def separate_sed(sed_string):
     """ Sed argümanları. """
@@ -63,6 +63,7 @@ def separate_sed(sed_string):
         return replace, replace_with, flags.lower()
     return None
 
+
 @register(outgoing=True, pattern="^sed", ignore_unsafe=True)
 async def sed(command):
     """ Sed komutu için Telegram'da sed kullanın. """
@@ -104,9 +105,10 @@ async def sed(command):
         if text:
             await command.edit(f"Bunu mu demek istedin ? \n\n{text}")
 
+
 CMD_HELP.update({
     "sed":
-    "sed<sınırlayıcı><eski kelime(ler)><sınırlayıcı><yeni kelime(ler)>\
-    \nKullanım: Sed kullanarak bir kelimeyi veya kelimeleri değiştirir.\
-    \nSınırlayıcılar: `/, :, |, _`"
+        "sed<sınırlayıcı><eski kelime(ler)><sınırlayıcı><yeni kelime(ler)>\
+        \nKullanım: Sed kullanarak bir kelimeyi veya kelimeleri değiştirir.\
+        \nSınırlayıcılar: `/, :, |, _`"
 })

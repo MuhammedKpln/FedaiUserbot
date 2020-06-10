@@ -15,11 +15,14 @@
 #
 from asyncio import sleep
 
-from userbot.moduller.admin import get_user_from_event
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
-from userbot.events import extract_args, register
 from telethon.events import NewMessage
 from telethon.tl.types import ChannelParticipantsAdmins
+
+from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, bot
+from userbot.events import extract_args, register
+from userbot.moduller.admin import get_user_from_event
+
+
 @register(outgoing=True, pattern="^.id")
 async def useridgetter(target):
     """ .id komutu belirlenen kullanıcının ID numarasını verir """
@@ -42,6 +45,7 @@ async def useridgetter(target):
     else:
         await target.edit("`Bir mesajı alıntılamalısın.`")
 
+
 @register(outgoing=True, pattern="^.link")
 async def permalink(mention):
     """ .link komutu belirlenen kullanıcının profil bağlantısını metin ile ulaşılabilir hale getirir """
@@ -55,10 +59,12 @@ async def permalink(mention):
                                       "") if user.first_name else user.username
         await mention.edit(f"[{tag}](tg://user?id={user.id})")
 
+
 @register(outgoing=True, pattern="^.chatid")
 async def chatidgetter(chat):
     """ .chatid komutu belirlenen grubun ID numarasını verir """
     await chat.edit("Grup ID: `" + str(chat.chat_id) + "`")
+
 
 @register(outgoing=True, pattern=r"^.log")
 async def log(log_text):
@@ -81,11 +87,13 @@ async def log(log_text):
     await sleep(2)
     await log_text.delete()
 
+
 @register(outgoing=True, pattern="^.kickme")
 async def kickme(leave):
     """ .kickme komutu gruptan çıkmaya yarar """
     await leave.edit("Güle Güle ben gidiyorum 🤠")
     await leave.client.kick_participant(leave.chat_id, 'me')
+
 
 @register(outgoing=True, pattern="^.unmutechat")
 async def unmute_chat(unm_e):
@@ -99,6 +107,7 @@ async def unmute_chat(unm_e):
     await unm_e.edit("```Sohbetin sesi açıldı```")
     await sleep(2)
     await unm_e.delete()
+
 
 @register(outgoing=True, pattern="^.mutechat")
 async def mute_chat(mute_e):
@@ -118,6 +127,7 @@ async def mute_chat(mute_e):
             BOTLOG_CHATID,
             str(mute_e.chat_id) + " susturuldu.")
 
+
 @register(incoming=True, disable_errors=True)
 async def keep_read(message):
     """ Mute mantığı. """
@@ -131,8 +141,10 @@ async def keep_read(message):
             if i.groupid == str(message.chat_id):
                 await message.client.send_read_acknowledge(message.chat_id)
 
+
 # Regex-Ninja modülü için teşekkürler @Kandnub
 regexNinja = False
+
 
 @register(outgoing=True, pattern="^s/")
 async def sedNinja(event):
@@ -141,12 +153,13 @@ async def sedNinja(event):
         await sleep(.5)
         await event.delete()
 
+
 @register(outgoing=True, pattern="^.regexninja")
 async def sedNinjaToggle(event):
     """ Regex ninja modülünü etkinleştirir veya devre dışı bırakır. """
     global regexNinja
     args = extract_args(event)
-    if len(args) < 1 or args not in ['on','off']:
+    if len(args) < 1 or args not in ['on', 'off']:
         await event.edit("`Regexbot ninja modu konusunda ne yapacağımı bilmiyorum.`")
     else:
         if args == "on":
@@ -180,22 +193,22 @@ async def _(event: NewMessage.Event) -> None:
 
 CMD_HELP.update({
     "chat":
-    ".chatid\
-\nKullanım: Belirlenen grubun ID numarasını verir\
-\n\n.id\
-\nKullanım: Belirlenen kullanıcının ID numarasını verir.\
-\n\n.log\
-\nKullanım: Yanıtlanan mesajı günlük grubuna gönderir.\
-\n\n.kickme\
-\nKullanım: Belirlenen gruptan ayrılmanızı sağlar.\
-\n\n.unmutechat\
-\nKullanım: Susturulmuş bir sohbetin sesini açar.\
-\n\n.mutechat\
-\nKullanım: Belirlenen grubu susturur.\
-\n\n.link <kullanıcı adı/kullanıcı id> : <isteğe bağlı metin> (veya) herhangi birinin mesajına .link ile yanıt vererek <isteğe bağlı metin>\
-\nKullanım: İsteğe bağlı özel metin ile kullanıcının profiline kalıcı bir bağlantı oluşturun.\
-\n\n.regexninja on/off\
-\nKullanım: Küresel olarak regex ninja modülünü etkinleştirir / devre dışı bırakır.\
-\nRegex ninja modülü regex bot tarfından tetiklenen mesajları silmek için yardımcı olur.",
-"admincagir": ".admincagir \nKullanim: Grup adminlerini cagirir"
+        ".chatid\
+    \nKullanım: Belirlenen grubun ID numarasını verir\
+    \n\n.id\
+    \nKullanım: Belirlenen kullanıcının ID numarasını verir.\
+    \n\n.log\
+    \nKullanım: Yanıtlanan mesajı günlük grubuna gönderir.\
+    \n\n.kickme\
+    \nKullanım: Belirlenen gruptan ayrılmanızı sağlar.\
+    \n\n.unmutechat\
+    \nKullanım: Susturulmuş bir sohbetin sesini açar.\
+    \n\n.mutechat\
+    \nKullanım: Belirlenen grubu susturur.\
+    \n\n.link <kullanıcı adı/kullanıcı id> : <isteğe bağlı metin> (veya) herhangi birinin mesajına .link ile yanıt vererek <isteğe bağlı metin>\
+    \nKullanım: İsteğe bağlı özel metin ile kullanıcının profiline kalıcı bir bağlantı oluşturun.\
+    \n\n.regexninja on/off\
+    \nKullanım: Küresel olarak regex ninja modülünü etkinleştirir / devre dışı bırakır.\
+    \nRegex ninja modülü regex bot tarfından tetiklenen mesajları silmek için yardımcı olur.",
+    "admincagir": ".admincagir \nKullanim: Grup adminlerini cagirir"
 })

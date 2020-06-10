@@ -15,17 +15,19 @@
 #
 import asyncio
 
-from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
+from coffeehouse.lydia import LydiaAI
 
-from userbot.events import extract_args, register
 from userbot import CMD_HELP, LOGS, LYDIA_API_KEY
+from userbot.events import register
+
 
 async def lydia_init():
     try:
         from userbot.moduller.sql_helper.lydia_sql import get_s, get_all_s, add_s, remove_s
     except:
         LOGS.warn("Lydia veritabanı bağlantısı başarısız oldu")
+
 
 asyncio.run(lydia_init())
 
@@ -36,6 +38,7 @@ if LYDIA_API_KEY:
     api_key = LYDIA_API_KEY
     api_client = API(api_key)
     lydia = LydiaAI(api_client)
+
 
 @register(outgoing=True, pattern="^.repcf")
 async def repcf(event):
@@ -51,6 +54,7 @@ async def repcf(event):
     except Exception as e:
         await event.edit(str(e))
 
+
 @register(outgoing=True, pattern="^.addcf")
 async def addcf(event):
     if event.fwd_from:
@@ -65,9 +69,12 @@ async def addcf(event):
         if not reply_msg.from_id:
             return await event.edit("Geçersiz kullanıcı türü.")
         ACC_LYDIA.update({(event.chat_id & reply_msg.from_id): session})
-        await event.edit("Lydia, {} kullanıcısı için {} sohbetinde başarıyla etkinleştirildi!".format(str(reply_msg.from_id), str(event.chat_id)))
+        await event.edit(
+            "Lydia, {} kullanıcısı için {} sohbetinde başarıyla etkinleştirildi!".format(str(reply_msg.from_id),
+                                                                                         str(event.chat_id)))
     else:
         await event.edit("Lydia AI'yı etkinleştirmek için bir kullanıcıyı yanıtlayın")
+
 
 @register(outgoing=True, pattern="^.remcf")
 async def remcf(event):
@@ -79,9 +86,12 @@ async def remcf(event):
     reply_msg = await event.get_reply_message()
     try:
         del ACC_LYDIA[event.chat_id & reply_msg.from_id]
-        await event.edit("Lydia, {} kullanıcısı için {} sohbetinde başarıyla devre dışı bırakıldı!".format(str(reply_msg.from_id), str(event.chat_id)))
+        await event.edit(
+            "Lydia, {} kullanıcısı için {} sohbetinde başarıyla devre dışı bırakıldı!".format(str(reply_msg.from_id),
+                                                                                              str(event.chat_id)))
     except Exception:
         await event.edit("Bu kullanıcıda Lydia aktif değil.")
+
 
 @register(incoming=True, disable_edited=True)
 async def user(event):
@@ -99,12 +109,13 @@ async def user(event):
     except (KeyError, TypeError):
         return
 
+
 CMD_HELP.update({
     "lydia":
-    ".addcf <kullanıcı adı/yanıtlayarak>\
-\nKullanım: Lydia'nın otomatik sohbetini etkinleştirir. \
-\n\n.remcf <kullanıcı adı/yanıtlayarak>\
-\nKullanım: Lydia'nın otomatik sohbetini devre dışı bırakır. \
-\n\n.repcf <kullanıcı adı/yanıtlayarak>\
-\nKullanım: Lydia'nın otomatik sohbetiini belli bir kişi için etkinleştirir."
+        ".addcf <kullanıcı adı/yanıtlayarak>\
+    \nKullanım: Lydia'nın otomatik sohbetini etkinleştirir. \
+    \n\n.remcf <kullanıcı adı/yanıtlayarak>\
+    \nKullanım: Lydia'nın otomatik sohbetini devre dışı bırakır. \
+    \n\n.repcf <kullanıcı adı/yanıtlayarak>\
+    \nKullanım: Lydia'nın otomatik sohbetiini belli bir kişi için etkinleştirir."
 })

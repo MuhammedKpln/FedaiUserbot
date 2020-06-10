@@ -1,4 +1,3 @@
-
 #
 
 #
@@ -10,20 +9,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import sys
 import asyncio
-import heroku3
+import sys
+from os import remove, execle, path, environ
 
+import heroku3
 from git import Repo
-from shutil import rmtree
-from os import remove, execle, path, makedirs, getenv, environ
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 
-from userbot import CMD_HELP, bot, HEROKU_APIKEY, HEROKU_APPNAME, UPSTREAM_REPO_URL
+from userbot import CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME, UPSTREAM_REPO_URL
 from userbot.events import extract_args, register
 
 requirements_path = path.join(
     path.dirname(path.dirname(path.dirname(__file__))), 'requirements.txt')
+
 
 async def gen_chlog(repo, diff):
     ch_log = ''
@@ -31,6 +30,7 @@ async def gen_chlog(repo, diff):
     for c in repo.iter_commits(diff):
         ch_log += f'•[{c.committed_datetime.strftime(d_form)}]: {c.summary} <{c.author}>\n'
     return ch_log
+
 
 async def update_requirements():
     reqs = str(requirements_path)
@@ -43,6 +43,7 @@ async def update_requirements():
         return process.returncode
     except Exception as e:
         return repr(e)
+
 
 @register(outgoing=True, pattern=r"^\.update(?: |$)(.*)")
 async def upstream(ups):
@@ -178,10 +179,11 @@ async def upstream(ups):
         execle(sys.executable, *args, environ)
         return
 
+
 CMD_HELP.update({
     'update':
-    ".update\
-\nKullanım: Botunuza siz kurduktan sonra herhangi bir güncelleme gelip gelmediğini kontrol eder.\
-\n\n.update now\
-\nKullanım: Botunuzu günceller."
+        ".update\
+    \nKullanım: Botunuza siz kurduktan sonra herhangi bir güncelleme gelip gelmediğini kontrol eder.\
+    \n\n.update now\
+    \nKullanım: Botunuzu günceller."
 })

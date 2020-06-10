@@ -1,8 +1,8 @@
-
 """ UserBot yardım komutu """
 
 from userbot import CMD_HELP
 from userbot.events import extract_args, register
+
 
 @register(outgoing=True, pattern="^.fedai")
 async def fedai(event):

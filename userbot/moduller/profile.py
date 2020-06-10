@@ -28,6 +28,7 @@ from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
 
 from userbot import bot, CMD_HELP
 from userbot.events import extract_args, register
+
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```Medya geçerli değil.```"
 PP_CHANGED = "```Profil resmi başarıyla değiştirildi.```"
@@ -39,6 +40,8 @@ BIO_SUCCESS = "```Biyografi başarıyla değiştirildi.```"
 NAME_OK = "```Adın başarıyla değiştirildi.```"
 USERNAME_SUCCESS = "```Kullanıcı adın başarıyla değiştirildi.```"
 USERNAME_TAKEN = "```Kullanıcı adı müsait değil.```"
+
+
 # ===============================================================
 @register(outgoing=True, pattern="^.reserved$")
 async def mine(event):
@@ -48,6 +51,7 @@ async def mine(event):
     for channel_obj in result.chats:
         output_str += f"{channel_obj.title}\n@{channel_obj.username}\n\n"
     await event.edit(output_str)
+
 
 @register(outgoing=True, pattern="^.name")
 async def update_name(name):
@@ -64,6 +68,7 @@ async def update_name(name):
     await name.client(
         UpdateProfileRequest(first_name=firstname, last_name=lastname))
     await name.edit(NAME_OK)
+
 
 @register(outgoing=True, pattern="^.setpfp$")
 async def set_profilepic(propic):
@@ -94,12 +99,14 @@ async def set_profilepic(propic):
     else:
         await propic.edit(INVALID_MEDIA)
 
+
 @register(outgoing=True, pattern="^.setbio")
 async def set_biograph(setbio):
     """ .setbio komutu Telegram'da yeni bir biyografi ayarlamanızı sağlar. """
     newbio = extract_args(setbio)
     await setbio.client(UpdateProfileRequest(about=newbio))
     await setbio.edit(BIO_SUCCESS)
+
 
 @register(outgoing=True, pattern="^.username")
 async def update_username(username):
@@ -110,6 +117,7 @@ async def update_username(username):
         await username.edit(USERNAME_SUCCESS)
     except UsernameOccupiedError:
         await username.edit(USERNAME_TAKEN)
+
 
 @register(outgoing=True, pattern="^.count$")
 async def count(event):
@@ -147,6 +155,7 @@ async def count(event):
 
     await event.edit(result)
 
+
 @register(outgoing=True, pattern=r"^.delpfp")
 async def remove_profilepic(delpfp):
     """ .delpfp komutu Telegram'daki şu anki profil resminizi kaldırır. """
@@ -173,20 +182,21 @@ async def remove_profilepic(delpfp):
     await delpfp.edit(
         f"`{len(input_photos)} adet profil fotoğrafı silindi.`")
 
+
 CMD_HELP.update({
     "profile":
-    ".username <yeni kullanıcı adı>\
-\nKullanımı: Telegram'daki kullanıcı adınızı değişir.\
-\n\n.name <isim> or .name <isim> <soyisim>\
-\nKullanımı: Telegram'daki isminizi değişir. (Ad ve soyad ilk boşluğa dayanarak birleştirilir.)\
-\n\n.setpfp\
-\nKullanımı: Bir resmi Telegram'da profil resmi yapmak için .setpfp komutuyla cevap verin.\
-\n\n.setbio <yeni biyografi>\
-\nKullanımı: Telegram'daki biyografinizi bu komutu kullanarak değiştirin..\
-\n\n.delpfp or .delpfp <numara>/<all>\
-\nKullanımı: Telegram profil fotoğrafınızı kaldırır.\
-\n\n.reserved\
-\nKullanımı: Rezerve ettiğiniz kullanıcı adlarını gösterir.\
-\n\n.count\
-\nKullanımı: Gruplarınızı, sohbetlerinizi, aktif botları vs. sayar."
+        ".username <yeni kullanıcı adı>\
+    \nKullanımı: Telegram'daki kullanıcı adınızı değişir.\
+    \n\n.name <isim> or .name <isim> <soyisim>\
+    \nKullanımı: Telegram'daki isminizi değişir. (Ad ve soyad ilk boşluğa dayanarak birleştirilir.)\
+    \n\n.setpfp\
+    \nKullanımı: Bir resmi Telegram'da profil resmi yapmak için .setpfp komutuyla cevap verin.\
+    \n\n.setbio <yeni biyografi>\
+    \nKullanımı: Telegram'daki biyografinizi bu komutu kullanarak değiştirin..\
+    \n\n.delpfp or .delpfp <numara>/<all>\
+    \nKullanımı: Telegram profil fotoğrafınızı kaldırır.\
+    \n\n.reserved\
+    \nKullanımı: Rezerve ettiğiniz kullanıcı adlarını gösterir.\
+    \n\n.count\
+    \nKullanımı: Gruplarınızı, sohbetlerinizi, aktif botları vs. sayar."
 })

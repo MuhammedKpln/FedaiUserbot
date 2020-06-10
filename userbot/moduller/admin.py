@@ -17,21 +17,21 @@
 from asyncio import sleep
 from os import remove
 
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+from telethon.errors import (ChatAdminRequiredError,
                              ImageProcessFailedError, PhotoCropSizeSmallError,
                              UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import (UserIdInvalidError,
-                                          MessageTooLongError)
+from telethon.errors.rpcerrorlist import (
+    MessageTooLongError)
 from telethon.tl.functions.channels import (EditAdminRequest,
                                             EditBannedRequest,
                                             EditPhotoRequest)
 from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.tl.types import (PeerChannel, ChannelParticipantsAdmins,
+from telethon.tl.types import (ChannelParticipantsAdmins,
                                ChatAdminRights, ChatBannedRights,
                                MessageEntityMentionName, MessageMediaPhoto,
                                ChannelParticipantsBots)
 
-from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, bot
+from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP
 from userbot.events import extract_args, register
 
 # =================== CONSTANT ===================
@@ -73,6 +73,8 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+
 # ================================================
 @register(outgoing=True, pattern="^.setgpic")
 async def set_group_photo(gpic):
@@ -101,7 +103,7 @@ async def set_group_photo(gpic):
         try:
             await gpic.client(
                 EditPhotoRequest(gpic.chat_id, await
-                                 gpic.client.upload_file(photo)))
+                gpic.client.upload_file(photo)))
             await gpic.edit(CHAT_PP_CHANGED)
 
         except PhotoCropSizeSmallError:
@@ -112,6 +114,7 @@ async def set_group_photo(gpic):
             await gpic.edit(INVALID_MEDIA)
     else:
         await gpic.edit(INVALID_MEDIA)
+
 
 @register(outgoing=True, pattern="^.promote")
 @register(incoming=True, from_users=BRAIN_CHECKER, pattern="^.promote")
@@ -160,8 +163,9 @@ async def promote(promt):
     if BOTLOG:
         await promt.client.send_message(
             BOTLOG_CHATID, "#YETKILENDIRME\n"
-            f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {promt.chat.title}(`{promt.chat_id}`)")
+                           f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {promt.chat.title}(`{promt.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.demote")
 async def demote(dmod):
@@ -208,8 +212,9 @@ async def demote(dmod):
     if BOTLOG:
         await dmod.client.send_message(
             BOTLOG_CHATID, "#YETKIDUSURME\n"
-            f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {dmod.chat.title}(`{dmod.chat_id}`)")
+                           f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {dmod.chat.title}(`{dmod.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.ban")
 async def ban(bon):
@@ -257,15 +262,17 @@ async def ban(bon):
     # Mesajı silin ve ardından komutun
     # incelikle yapıldığını söyleyin
     if reason:
-        await bon.edit(f"[{user.first_name}](tg://user?id={user.id}) (`{str(user.id)}`) `yasaklandı !!`\nNedeni: {reason}")
+        await bon.edit(
+            f"[{user.first_name}](tg://user?id={user.id}) (`{str(user.id)}`) `yasaklandı !!`\nNedeni: {reason}")
     else:
         await bon.edit(f"[{user.first_name}](tg://user?id={user.id}) (`{str(user.id)}`) `yasaklandı !!`")
     # Yasaklama işlemini günlüğe belirtelim
     if BOTLOG:
         await bon.client.send_message(
             BOTLOG_CHATID, "#BAN\n"
-            f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {bon.chat.title}(`{bon.chat_id}`)")
+                           f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {bon.chat.title}(`{bon.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.unban")
 async def nothanos(unbon):
@@ -297,10 +304,11 @@ async def nothanos(unbon):
         if BOTLOG:
             await unbon.client.send_message(
                 BOTLOG_CHATID, "#UNBAN\n"
-                f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-                f"GRUP: {unbon.chat.title}(`{unbon.chat_id}`)")
+                               f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                               f"GRUP: {unbon.chat.title}(`{unbon.chat_id}`)")
     except:
         await unbon.edit("`Sanırım bu kişi yasaklama mantığım ile uyuşmuyor`")
+
 
 @register(outgoing=True, pattern="^.mute")
 async def spider(spdr):
@@ -371,8 +379,9 @@ async def mutmsg(spdr, user, reason):
     if BOTLOG:
         await spdr.client.send_message(
             BOTLOG_CHATID, "#MUTE\n"
-            f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {spdr.chat.title}(`{spdr.chat_id}`)")
+                           f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {spdr.chat.title}(`{spdr.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.unmute")
 async def unmoot(unmot):
@@ -419,8 +428,9 @@ async def unmoot(unmot):
         if BOTLOG:
             await unmot.client.send_message(
                 BOTLOG_CHATID, "#UNMUTE\n"
-                f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-                f"GRUP: {unmot.chat.title}(`{unmot.chat_id}`)")
+                               f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                               f"GRUP: {unmot.chat.title}(`{unmot.chat_id}`)")
+
 
 @register(incoming=True)
 async def muter(moot):
@@ -454,6 +464,7 @@ async def muter(moot):
     for i in gmuted:
         if i.sender == str(moot.sender_id):
             await moot.delete()
+
 
 @register(outgoing=True, pattern="^.ungmute")
 async def ungmoot(un_gmute):
@@ -493,8 +504,9 @@ async def ungmoot(un_gmute):
         if BOTLOG:
             await un_gmute.client.send_message(
                 BOTLOG_CHATID, "#UNGMUTE\n"
-                f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-                f"GRUP: {un_gmute.chat.title}(`{un_gmute.chat_id}`)")
+                               f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                               f"GRUP: {un_gmute.chat.title}(`{un_gmute.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.gmute")
 async def gspider(gspdr):
@@ -524,7 +536,8 @@ async def gspider(gspdr):
 
     # Eğer kullanıcı sudo ise
     if user.id in BRAIN_CHECKER:
-        await gspdr.edit(f"`Gmute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu susturamam.`")
+        await gspdr.edit(
+            f"`Gmute Hatası!` [{user.first_name}](tg://user?id={user.id}) `bir Fedai yetkilisi.. Yani onu susturamam.`")
         return
 
     # Başarı olursa bilgi ver
@@ -534,15 +547,17 @@ async def gspider(gspdr):
             '`Hata! Kullanıcı zaten küresel olarak susturuldu.`')
     else:
         if reason:
-            await gspdr.edit(f"[{user.first_name}](tg://user?id={user.id}) `küresel olarak susturuldu!`\nNedeni: {reason}")
+            await gspdr.edit(
+                f"[{user.first_name}](tg://user?id={user.id}) `küresel olarak susturuldu!`\nNedeni: {reason}")
         else:
             await gspdr.edit(f"[{user.first_name}](tg://user?id={user.id}) `küresel olarak susturuldu!`")
 
         if BOTLOG:
             await gspdr.client.send_message(
                 BOTLOG_CHATID, "#GMUTE\n"
-                f"USER: [{user.first_name}](tg://user?id={user.id})\n"
-                f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)")
+                               f"USER: [{user.first_name}](tg://user?id={user.id})\n"
+                               f"CHAT: {gspdr.chat.title}(`{gspdr.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.zombies", groups_only=False)
 async def rm_deletedacc(show):
@@ -607,8 +622,9 @@ async def rm_deletedacc(show):
     if BOTLOG:
         await show.client.send_message(
             BOTLOG_CHATID, "#TEMIZLIK\n"
-            f"**{del_u}** tane silinmiş hesap çıkartıldı !!\
+                           f"**{del_u}** tane silinmiş hesap çıkartıldı !!\
             \nGRUP: {show.chat.title}(`{show.chat_id}`)")
+
 
 @register(outgoing=True, pattern="^.admins$")
 async def get_admin(show):
@@ -628,6 +644,7 @@ async def get_admin(show):
     except ChatAdminRequiredError as err:
         mentions += " " + str(err) + "\n"
     await show.edit(mentions, parse_mode="html")
+
 
 @register(outgoing=True, pattern="^.pin$")
 async def pin(msg):
@@ -669,9 +686,10 @@ async def pin(msg):
     if BOTLOG:
         await msg.client.send_message(
             BOTLOG_CHATID, "#PIN\n"
-            f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {msg.chat.title}(`{msg.chat_id}`)\n"
-            f"LOUD: {not is_silent}")
+                           f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {msg.chat.title}(`{msg.chat_id}`)\n"
+                           f"LOUD: {not is_silent}")
+
 
 @register(outgoing=True, pattern="^.kick")
 async def kick(usr):
@@ -718,8 +736,9 @@ async def kick(usr):
     if BOTLOG:
         await usr.client.send_message(
             BOTLOG_CHATID, "#KICK\n"
-            f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
-            f"GRUP: {usr.chat.title}(`{usr.chat_id}`)\n")
+                           f"KULLANICI: [{user.first_name}](tg://user?id={user.id})\n"
+                           f"GRUP: {usr.chat.title}(`{usr.chat_id}`)\n")
+
 
 @register(outgoing=True, pattern="^.users$")
 async def get_users(show):
@@ -782,7 +801,7 @@ async def get_user_from_event(event):
             await event.edit("`Kişinin kullanıcı adını, ID'sini veya yanıtını iletin!`")
             return user, extra
 
-        if event.message.entities :
+        if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
@@ -810,6 +829,7 @@ async def get_user_from_id(user, event):
         return None
 
     return user_obj
+
 
 @register(outgoing=True, pattern="^.usersdel$")
 async def get_usersdel(show):
@@ -868,7 +888,7 @@ async def get_userdel_from_event(event):
             await event.edit("`Silinen kullanıcının kullanıcı adını, ID'sini veya yanıtını iletin!`")
             return
 
-        if event.message.entities :
+        if event.message.entities:
             probable_user_mention_entity = event.message.entities[0]
 
             if isinstance(probable_user_mention_entity,
@@ -897,6 +917,7 @@ async def get_userdel_from_id(user, event):
 
     return user_obj
 
+
 @register(outgoing=True, pattern="^.bots$", groups_only=True)
 async def get_bots(show):
     """ .bots komutu gruba ait olan botları listeler """
@@ -904,10 +925,10 @@ async def get_bots(show):
     title = info.title if info.title else "this chat"
     mentions = f'<b> {title} grubunda bulunan botlar:</b>\n'
     try:
-       # if isinstance(message.to_id, PeerChat):
+        # if isinstance(message.to_id, PeerChat):
         #    await show.edit("`Sadece süper grupların botlara sahip olabileceğini duydum.`")
         #   return
-       # else:
+        # else:
         async for user in show.client.iter_participants(
                 show.chat_id, filter=ChannelParticipantsBots):
             if not user.deleted:
@@ -934,32 +955,33 @@ async def get_bots(show):
         )
         remove("botlist.txt")
 
+
 CMD_HELP.update({
     "admin":
-    ".promote <kullanıcı adı/yanıtlama> <özel isim (isteğe bağlı)>\
-\nKullanım: Sohbetteki kişiye yönetici hakları sağlar.\
-\n\n.demote <kullanıcı adı/yanıtlama>\
-\nKullanım: Sohbetteki kişinin yönetici izinlerini iptal eder.\
-\n\n.ban <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
-\nKullanım: Sohbetteki kişiyi gruptan yasaklar.\
-\n\n.unban <kullanıcı adı/yanıtlama>\
-\nKullanım: Sohbetteki kişinin yasağını kaldırır.\
-\n\n.mute <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
-\nKullanım: Sohbetteki kişiyi susturur, yöneticilerde de çalışır.\
-\n\n.unmute <kullanıcı adı/yanıtlama>\
-\nKullanım: Kişiyi sessize alınanlar listesinden kaldırır.\
-\n\n.gmute <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
-\nKullanım: Kişiyi yönetici olduğunuz tüm gruplarda susturur.\
-\n\n.ungmute <kullanıcı adı/yanıtlama>\
-\nKullanım: Kişiyi küresel olarak sessize alınanlar listesinden kaldırır.\
-\n\n.zombies\
-\nKullanım: Bir gruptaki silinmiş hesapları arar. Gruptan silinen hesapları kaldırmak için --.zombies clean-- komutunu kullanın.\
-\n\n.admins\
-\nKullanım: Sohbet yöneticilerinin listesini alır.\
-\n\n.bots\
-\nKullanım: Sohbet içinde bulunan botların listesini alır.\
-\n\n.users veya .users <kullanıcı adı>\
-\nKullanım: Sohbetteki tüm (veya sorgulanan) kullanıcıları alır.\
-\n\n.setgppic <yanıtlanan resim>\
-\nKullanım: Grubun resmini değiştirir."
+        ".promote <kullanıcı adı/yanıtlama> <özel isim (isteğe bağlı)>\
+    \nKullanım: Sohbetteki kişiye yönetici hakları sağlar.\
+    \n\n.demote <kullanıcı adı/yanıtlama>\
+    \nKullanım: Sohbetteki kişinin yönetici izinlerini iptal eder.\
+    \n\n.ban <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
+    \nKullanım: Sohbetteki kişiyi gruptan yasaklar.\
+    \n\n.unban <kullanıcı adı/yanıtlama>\
+    \nKullanım: Sohbetteki kişinin yasağını kaldırır.\
+    \n\n.mute <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
+    \nKullanım: Sohbetteki kişiyi susturur, yöneticilerde de çalışır.\
+    \n\n.unmute <kullanıcı adı/yanıtlama>\
+    \nKullanım: Kişiyi sessize alınanlar listesinden kaldırır.\
+    \n\n.gmute <kullanıcı adı/yanıtlama> <nedeni (isteğe bağlı)>\
+    \nKullanım: Kişiyi yönetici olduğunuz tüm gruplarda susturur.\
+    \n\n.ungmute <kullanıcı adı/yanıtlama>\
+    \nKullanım: Kişiyi küresel olarak sessize alınanlar listesinden kaldırır.\
+    \n\n.zombies\
+    \nKullanım: Bir gruptaki silinmiş hesapları arar. Gruptan silinen hesapları kaldırmak için --.zombies clean-- komutunu kullanın.\
+    \n\n.admins\
+    \nKullanım: Sohbet yöneticilerinin listesini alır.\
+    \n\n.bots\
+    \nKullanım: Sohbet içinde bulunan botların listesini alır.\
+    \n\n.users veya .users <kullanıcı adı>\
+    \nKullanım: Sohbetteki tüm (veya sorgulanan) kullanıcıları alır.\
+    \n\n.setgppic <yanıtlanan resim>\
+    \nKullanım: Grubun resmini değiştirir."
 })

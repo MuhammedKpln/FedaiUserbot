@@ -16,10 +16,10 @@
 
 """ Kimin size özel mesaj gönderebileceğini kontrol altına almanızı sağlayan UserBot modülüdür. """
 
+from sqlalchemy.exc import IntegrityError
 from telethon.tl.functions.contacts import BlockRequest, UnblockRequest
 from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.types import User
-from sqlalchemy.exc import IntegrityError
 
 from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      PM_AUTO_BAN, LASTMSG, LOGS, PM_UNAPPROVED)
@@ -27,10 +27,12 @@ from userbot.events import register
 
 # ========================= CONSTANTS ============================
 DEF_UNAPPROVED_MSG = PM_UNAPPROVED or ("`Hey! Bu bir bot. Endişelenme.\n\n`"
-                  "`Sahibim sana PM atma izni vermedi. `"
-                  "`Lütfen sahibimin aktif olmasını bekleyin, o genellikle PM'leri onaylar.\n\n`"
-                  "`Bildiğim kadarıyla o kafayı yemiş insanlara PM izni vermiyor.`")
+                                       "`Sahibim sana PM atma izni vermedi. `"
+                                       "`Lütfen sahibimin aktif olmasını bekleyin, o genellikle PM'leri onaylar.\n\n`"
+                                       "`Bildiğim kadarıyla o kafayı yemiş insanlara PM izni vermiyor.`")
 PM_USER_MSG = DEF_UNAPPROVED_MSG
+
+
 # =================================================================
 @register(incoming=True, disable_edited=True)
 async def permitpm(event):
@@ -109,6 +111,7 @@ async def permitpm(event):
                             " kişisi sadece bir hayal kırıklığı idi. PM'ni meşgul ettiği için engellendi.",
                         )
 
+
 @register(disable_edited=True, outgoing=True)
 async def auto_accept(event):
     """ İlk mesajı atan sizseniz otomatik olarak onaylanır. """
@@ -145,6 +148,7 @@ async def auto_accept(event):
                         f"[{chat.first_name}](tg://user?id={chat.id})",
                     )
 
+
 @register(outgoing=True, pattern="^.notifoff$")
 async def notifoff(noff_event):
     """ .notifoff komutu onaylanmamış kişilerden gelen PM lerden bildirim almamanızı sağlar. """
@@ -156,6 +160,7 @@ async def notifoff(noff_event):
     addgvar("NOTIF_OFF", True)
     await noff_event.edit("`PM izni olmayan kullanıcıların bildirimleri sessize alındı!`")
 
+
 @register(outgoing=True, pattern="^.notifon$")
 async def notifon(non_event):
     """ .notifon komutu onaylanmamış kişilerden gelen PM lerden bildirim almanızı sağlar. """
@@ -166,6 +171,7 @@ async def notifon(non_event):
         return
     delgvar("NOTIF_OFF")
     await non_event.edit("`PM izni olmayan kullanıcıarın bildirim göndermesine izin verildi!`")
+
 
 @register(outgoing=True, pattern="^.approve$")
 async def approvepm(apprvpm):
@@ -191,7 +197,7 @@ async def approvepm(apprvpm):
         if not isinstance(aname, User):
             await apprvpm.edit("`Şu an bir PM'de değilsin ve birinin mesajını alıntılamadın.`")
             return
-        name0 = aname.first_name 
+        name0 = aname.first_name
         uid = apprvpm.chat_id
 
     try:
@@ -212,6 +218,7 @@ async def approvepm(apprvpm):
             BOTLOG_CHATID,
             "#ONAYLANDI\n" + "Kullanıcı: " + f"[{name0}](tg://user?id={uid})",
         )
+
 
 @register(outgoing=True, pattern="^.disapprove$")
 async def disapprovepm(disapprvpm):
@@ -244,6 +251,7 @@ async def disapprovepm(disapprvpm):
             f"[{name0}](tg://user?id={disapprvpm.chat_id})"
             " kişisinin PM atma izni kaldırıldı.",
         )
+
 
 @register(outgoing=True, pattern="^.block$")
 async def blockpm(block):
@@ -278,6 +286,7 @@ async def blockpm(block):
             "#ENGELLENDI\n" + "Kullanıcı: " + f"[{name0}](tg://user?id={uid})",
         )
 
+
 @register(outgoing=True, pattern="^.unblock$")
 async def unblockpm(unblock):
     """ .unblock komutu insanların size yeniden PM atabilmelerini sağlar. """
@@ -295,6 +304,7 @@ async def unblockpm(unblock):
             " kişisinin engeli kaldırıldı.",
         )
 
+
 @register(outgoing=True, pattern="^.(rem|set)permitmsg")
 async def set_permit_msg(msg):
     txt = msg.text.split(' ', 1)
@@ -310,24 +320,25 @@ async def set_permit_msg(msg):
         PM_USER_MSG = UNAPPROVED_MSG = txt[1]
         await msg.edit(f'`Mesaj değiştirildi. Artık, ` {UNAPPROVED_MSG}')
 
+
 CMD_HELP.update({
     "pmpermit":
-    "\
-\n\n.approve\
-\nKullanım: Yanıt verilen kullanıcıya PM atma izni verilir.\
-\n\n.disapprove\
-\nKullanım: Yanıt verilen kullanıcının PM onayını kaldırır.\
-\n\n.setpermitmsg\
-\nPM izin mesajınızı (Hey! Bu bir bot. Endişelenme ...) değiştirir.\
-\nKullanım: .setpermitmsg <metin>\
-\n\n.rempermitmsg\
-\nPM izin mesajınızı varsayılana döndürür.\
-\n\n.block\
-\nKullanım: Bir kullanıcıyı engeller.\
-\n\n.unblock\
-\nKullanımı: Engellenmiş kullanıcının engelini kaldırır.\
-\n\n.notifoff\
-\nKullanım: Onaylanmamış özel mesajların bildirimlerini temizler ya da devre dışı bırakır.\
-\n\n.notifon\
-\nKullanım: Onaylanmamış özel mesajların bildirim göndermesine izin verir."
+        "\
+    \n\n.approve\
+    \nKullanım: Yanıt verilen kullanıcıya PM atma izni verilir.\
+    \n\n.disapprove\
+    \nKullanım: Yanıt verilen kullanıcının PM onayını kaldırır.\
+    \n\n.setpermitmsg\
+    \nPM izin mesajınızı (Hey! Bu bir bot. Endişelenme ...) değiştirir.\
+    \nKullanım: .setpermitmsg <metin>\
+    \n\n.rempermitmsg\
+    \nPM izin mesajınızı varsayılana döndürür.\
+    \n\n.block\
+    \nKullanım: Bir kullanıcıyı engeller.\
+    \n\n.unblock\
+    \nKullanımı: Engellenmiş kullanıcının engelini kaldırır.\
+    \n\n.notifoff\
+    \nKullanım: Onaylanmamış özel mesajların bildirimlerini temizler ya da devre dışı bırakır.\
+    \n\n.notifon\
+    \nKullanım: Onaylanmamış özel mesajların bildirim göndermesine izin verir."
 })

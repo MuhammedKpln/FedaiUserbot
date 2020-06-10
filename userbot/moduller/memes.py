@@ -14,12 +14,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from telethon import events
 import asyncio
-from userbot.events import extract_args, register
 from asyncio import sleep
 from collections import deque
+
 from userbot import CMD_HELP
+from userbot.events import extract_args, register
 
 
 @register(outgoing=True, pattern="^.hack")
@@ -30,7 +30,7 @@ async def port_hack(event):
 
     animation_interval = 3
     animation_ttl = range(0, 11)
-    #input_str = event.pattern_match.group(1)
+    # input_str = event.pattern_match.group(1)
     # if input_str == "hack":
     await event.edit("Hacking..")
     animation_chars = [
@@ -123,7 +123,8 @@ async def ddg(event):
         input_str.replace(" ", "+"))
     if sample_url:
         link = sample_url.rstrip()
-        await event.edit("**Bir dakika senin için 🦆 DuckDuckGo üzerinden arama yapıyorum**:\n🔎 [{}]({})".format(input_str, link))
+        await event.edit(
+            "**Bir dakika senin için 🦆 DuckDuckGo üzerinden arama yapıyorum**:\n🔎 [{}]({})".format(input_str, link))
     else:
 
         await event.edit("Bir şeyler ters gitti...")
@@ -131,15 +132,15 @@ async def ddg(event):
 
 CMD_HELP.update({
     "hack":
-    ".hack \
-    \nKullanım: Hacking animasyonudur.\n",
+        ".hack \
+        \nKullanım: Hacking animasyonudur.\n",
     "mizah":
-    ".mizah \
-    \nKullanım: Mizah selalesinden bir yudum alin.\n",
+        ".mizah \
+        \nKullanım: Mizah selalesinden bir yudum alin.\n",
     "type":
-    ".type \
-    \nKullanım: Yazilarinizi animasyonu bir sekilde yazin.\n",
+        ".type \
+        \nKullanım: Yazilarinizi animasyonu bir sekilde yazin.\n",
     "ddg":
-    ".ddg \
-    \nKullanım: Usengecler icin ddg aramasi gerceklestirin.\n",
+        ".ddg \
+        \nKullanım: Usengecler icin ddg aramasi gerceklestirin.\n",
 })
