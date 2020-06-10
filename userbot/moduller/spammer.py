@@ -16,7 +16,7 @@
 
 from telethon.events import NewMessage
 
-from userbot import LOGS
+from userbot import LOGS, CMD_HELP
 from userbot.events import extract_args, register
 from userbot.moduller.helpers import message
 
@@ -100,3 +100,11 @@ async def rmspam(e: NewMessage.Event) -> None:
         await e.edit(message('Kaydedilen spam başarılı bir şekilde silindi!'))
     else:
         await e.edit(message(f'{spam_name} ismiyle herhangi bir spam bulunamadi.'))
+
+
+CMD_HELP.update({
+    'spam': message('Kaydettiğiniz spamı gösterir'),
+    'spamekle': message('Yeni bir spam ekler \n\n Kullanım: .spamekle spamİsmi spam'),
+    'spamsil': message('Kaydettiğiniz spami siler \n\n Kullanım: .spamsil spamİsmi'),
+    'kspam': message('Tüm spamlerinizi listeler.')
+})
