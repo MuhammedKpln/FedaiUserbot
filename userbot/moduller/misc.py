@@ -83,7 +83,7 @@ async def alive(event):
                      "`KODLAMA DİLİ:` PYTHON\n"
                      f"`PATRONUM`: {DEFAULTUSER}\n\n"
                      "`UYDU DURUMU: ✅ UYGUN\n\n"
-                     "[⚡ PATRONUM OLMAYA NE DERSİN?⚡](https://t.me/FedaiUserBotSupport)")
+                     "⚡ PATRONUM OLMAYA NE DERSİN?⚡ (@FedaiUserBot)")
 
 
 @register(outgoing=True, pattern="^.restart$")
