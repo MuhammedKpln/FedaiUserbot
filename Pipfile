@@ -41,4 +41,4 @@ Pillow = ">=6.0.0"
 SQLAlchemy = ">=1.2"
 
 [requires]
-python_version = "3.8"
+python_version = "3.8.3"

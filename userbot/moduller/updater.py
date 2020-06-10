@@ -174,7 +174,7 @@ async def upstream(ups):
         await update_requirements()
         await ups.edit(f'`Güncelleme başarıyla tamamlandı!\n'
                        f'FedaiBot yeniden başlatılıyor sabırla beklediğin için teşekkür ederiz :)`')
-        args = [sys.executable, "seden.py"]
+        args = [sys.executable, "main.py"]
         execle(sys.executable, *args, environ)
         return
 
