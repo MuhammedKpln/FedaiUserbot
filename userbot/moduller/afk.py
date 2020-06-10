@@ -19,7 +19,7 @@ from random import choice, randint
 from telethon.events import StopPropagation
 
 from userbot import (CMD_HELP, BOTLOG,
-                     BOTLOG_CHATID, PM_AUTO_BAN, bot)
+                     BOTLOG_CHATID, PM_AUTO_BAN, bot, ISAFK)
 from userbot.events import extract_args, register
 
 # ========================= CONSTANTS ============================
@@ -47,7 +47,6 @@ AFKSTR = [
     "Hayat çok kısa, yapacak çok şey var...\nOnlardan birini yapıyorum...",
     "Şu an burada değilim....\nama öyleysem ...\n\nbu harika olmaz mıydı?",
 ]
-
 
 # =================================================================
 @register(incoming=True, disable_edited=True)
