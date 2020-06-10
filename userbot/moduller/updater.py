@@ -75,12 +75,12 @@ async def upstream(ups):
         origin = repo.create_remote('upstream', off_repo)
         origin.fetch()
         force_update = True
-        repo.create_head('master', origin.refs.seden)
-        repo.heads.seden.set_tracking_branch(origin.refs.sql)
-        repo.heads.seden.checkout(True)
+        repo.create_head('master', origin.refs.fedai)
+        repo.heads.fedai.set_tracking_branch(origin.refs.sql)
+        repo.heads.fedai.checkout(True)
 
     ac_br = repo.active_branch.name
-    if ac_br != 'seden':
+    if ac_br != 'fedai':
         await ups.edit(
             f'**[FedaiBot Güncelleyici]:**`Galiba botunun branch ismini değiştirdin. Kullandığın branch ismi: ({ac_br}). '
             f'Böyle olursa botunu güncelleyemem. Çünkü branch ismi uyuşmuyor..'
