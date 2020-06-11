@@ -1,14 +1,15 @@
 import datetime
 import re
 
-from userbot import bot
+from userbot import bot, CMD_HELP
 from userbot.events import extract_args, register
+from userbot.moduller.helpers import message
 
 plugin_category = "user"
 regexp = re.compile(r"(\d+)(h|g|sn|d|s)?")
 
 
-@register(outgoing=True, pattern="^.remindme ?(.*)")
+@register(outgoing=True, pattern="^.hatirlat ?(.*)")
 async def _(e) -> None:
     arg = extract_args(e).split(' ')
     time = arg[0]
@@ -127,3 +128,15 @@ async def _human_friendly_timedelta(timedelta: str) -> str:
     if len(text) == 0:
         text = "\u221E"
     return text
+
+
+CMD_HELP.update({
+    'hatirlat': message('Hatırlatıcı oluşturur. '
+                        '\n\n Kullanım: .hatırlat 2s "hatırlatma mesajınız" '
+                        '\n\nZamanlar:'
+                        '\n\n 2s - 2 saat'
+                        '\n\n 2sn - 2 saniye'
+                        '\n\n 2d - 2 dakika'
+                        '\n\n 2h - 2 hafta'
+                        )
+})
