@@ -58,9 +58,10 @@ async def _(e: NewMessage.Event) -> None:
             await bot(UploadProfilePhotoRequest(uploaded_image))
             os.remove(file_path)
             await e.edit(message('Profil fotoğrafınız başarılı bir şekilde değiştirildi!'))
-        except PhotoCropSizeSmallError as e:
-            _(e)
-            LOGS.exception(e)
+        except PhotoCropSizeSmallError as err:
+            await _(e)
+        except Exception as err:
+            LOGS.exception(err)
 
     except Exception as e:
         LOGS.exception(e)
