@@ -9,13 +9,13 @@ plugin_category = "user"
 regexp = re.compile(r"(\d+)(h|g|sn|d|s)?")
 
 
-@register(outgoing=True, pattern="^.hatirlat ?(.*)")
+@register(outgoing=True, pattern='^.hatırlat (\w*)')
 async def _(e) -> None:
-    arg = extract_args(e).split(' ')
-    time = arg[0]
-    text = arg[1]
+    time = e.pattern_match.group(1)
+    text = e.text.partition(e.pattern_match.group(1))[2]
 
-    if not len(arg) == 2:
+
+    if not time or not text:
         await e.edit('**Lütfen zaman ve bir hatirlatici mesaj belirtin.**')
         return
     await e.edit('**Fedai**` Peki sizin için bir hatırlatıcı oluşturuyorum...`')
