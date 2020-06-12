@@ -314,10 +314,10 @@ async def softupdate(ups):
 
 
 CMD_HELP.update({
-    'update':
-        ".update\
+    'softupdate':
+        ".softupdate\
     \nKullanım: Botunuza siz kurduktan sonra herhangi bir güncelleme gelip gelmediğini kontrol eder.\
-    \n\n.update now\
+    \n\n.softupdate now\
     \nKullanım: Botunuzu günceller."
 })
 
