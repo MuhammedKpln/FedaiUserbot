@@ -83,10 +83,6 @@
       "description": "PM Otomatik Yasaklama Özelliği. 'Hey! Bu bir bot.' modülüdür.",
       "value": "False"
     },
-    "YOUTUBE_API_KEY": {
-      "description": ".yt komutu için YouTube Veri API'sı keyidir. https://console.cloud.google.com adresinden alın.",
-      "required": false
-    },
     "REM_BG_API_KEY": {
       "description": ".rbg komutu için API Key. https://www.remove.bg/api adresinden alın.",
       "required": false
@@ -118,10 +114,6 @@
     },
     "LYDIA_API_KEY": {
       "description": "Bu modülün çalışması için CoffeeHouse API'sine ihtiyacı var. 'https://coffeehouse.intellivoid.info/dashboard' Buradan alabilirsiniz.",
-      "required": false
-    },
-    "WEATHER_DEFCITY": {
-      "description": "UserBot'un hava durumu modülü için varsayılan şehri ayarlayın.",
       "required": false
     },
     "LOGSPAMMER": {
