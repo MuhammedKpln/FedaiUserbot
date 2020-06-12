@@ -59,7 +59,7 @@ async def _(e: NewMessage.Event) -> None:
             os.remove(file_path)
             await e.edit(message('Profil fotoğrafınız başarılı bir şekilde değiştirildi!'))
         except PhotoCropSizeSmallError as err:
-            await _(e)
+            return await _(e)
         except Exception as err:
             LOGS.exception(err)
 
@@ -67,4 +67,6 @@ async def _(e: NewMessage.Event) -> None:
         LOGS.exception(e)
 
 
-CMD_HELP.update(message('.yenipp \n\n Yeni bir profil fotoğrafı ayarlar.'))
+CMD_HELP.update({
+ 'yenipp': message('.yenipp \n\n Yeni bir profil fotoğrafı ayarlar.')
+})
