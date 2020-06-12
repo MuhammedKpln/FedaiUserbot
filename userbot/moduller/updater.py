@@ -279,10 +279,10 @@ async def softupdate(ups):
         if path.isfile('config.env'):
             repo.git.add('config.env', force=True)
 
-        repo.git.checkout("seden")
+        repo.git.checkout("fedai")
 
         repo.config_writer().set_value("user", "name",
-                                       "SedenBot Updater").release()
+                                       "FedaiBot Updater").release()
         repo.config_writer().set_value("user", "email",
                                        "<>").release()
         repo.git.pull()
@@ -297,7 +297,7 @@ async def softupdate(ups):
             remote = repo.create_remote('heroku', heroku_remote_url)
 
         try:
-            remote.push(refspec="HEAD:refs/heads/seden", force=True)
+            remote.push(refspec="HEAD:refs/heads/fedai", force=True)
         except GitCommandError as e:
             await ups.edit(f'{txt}\n`Git hatası! {e}`')
             return
@@ -306,8 +306,8 @@ async def softupdate(ups):
 
         await ups.edit(
             '`Güncelleme başarıyla tamamlandı!\n'
-            'Seden yeniden başlatılıyor... Lütfen biraz bekleyin, ardından '
-            '".alive" komutunu kullanarak SedenBotun çalışıp çalışmadığnıı kontrol edin.`')
+            'Fedai yeniden başlatılıyor... Lütfen biraz bekleyin, ardından '
+            '".alive" komutunu kullanarak FedaiBotun çalışıp çalışmadığnıı kontrol edin.`')
 
         await ups.client.disconnect()
     execle(sys.executable, sys.executable, *sys.argv)
