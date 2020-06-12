@@ -15,6 +15,7 @@
 #
 
 from asyncio import sleep
+import random
 
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest
@@ -61,7 +62,7 @@ async def _(event):
 
             except Exception as err:
                 LOGS.error(err)
-                _sendMessageToMainAccount(user, str(err))
+                await _sendMessageToMainAccount(user, str(err))
 
 
 async def _sendMessageToMainAccount(users, message=''):
@@ -83,26 +84,23 @@ async def _stopPullingUsers(event):
 
 @register(outgoing=True, pattern='.as')
 async def uyebas(event):
+    from .chatinfo import get_chatinfo
     await event.edit('`USER DUMP BASLADI (Database yükleniyor..) - by` @hasanisabbah.')
     await sleep(3)
-    # await event.edit('Görmediniz say eheheh')
     result = await event.client(GetContactsRequest(
         hash=0
     ))
-    limit = 10
-    # users = []
-    # for userStatus in result:
-    #     user = await bot.get_entity(userStatus.user_id)
-    #     await event.edit(f'`{user.id}` kullanici hafizaya alindi..')
-    #     users.append(user)
 
-    #     if len(users) == limit:
-    #         break
     try:
-        # await event.edit('Eklemeler basladi..')
+        chat = await get_chatinfo(event)
+        chat_obj_info = await event.client.get_entity(chat.full_chat.id)
+        channel = chat_obj_info.id
+        users = result.users
+        random.shuffle(users)
+        await event.edit('Eklemeler basladi..')
         await event.client(InviteToChannelRequest(
-            channel=1425906189,
-            users=result.users[:10]
+            channel=channel,
+            users=users
         ))
     except Exception as e:
         print(e)
