@@ -13,56 +13,151 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-
+import csv
+import traceback
 from asyncio import sleep
-import random
 
+from telethon.errors import PeerFloodError, UserPrivacyRestrictedError, ChatWriteForbiddenError, \
+    UserNotMutualContactError
 from telethon.tl.functions.channels import InviteToChannelRequest
-from telethon.tl.functions.contacts import AddContactRequest, GetContactsRequest
-from telethon.tl.types import ChannelParticipantsRecent
+from telethon.tl.functions.contacts import GetContactsRequest
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import ChannelParticipantsRecent, InputPeerEmpty, InputPeerChannel, InputPeerUser
 
 from userbot import bot, LOGS
 from userbot.events import register, extract_args
+from userbot.moduller.helpers import message
 
 stopPullingUsers = False
 
-
-@register(outgoing=True, pattern=".sa")
-async def _(event):
-    global stopPullingUsers
-    await event.edit('Merhabalar herkese')
-    args = extract_args(event).split(' ')
-    notifyUser = bool(args[1]) if len(args) > 1 else True
-    limit = int(args[0]) if isinstance(args[0], int) else 1000
-
-    sleepAfterAwhile = []
-    async for user in event.client.iter_participants(event.chat_id, limit=int(limit), filter=ChannelParticipantsRecent):
-
-        if stopPullingUsers:
-            break
-
-        if not user.bot and not user.contact and not user.is_self:
-            print(user.first_name)
-            try:
-                result = await event.client(AddContactRequest(
-                    id=int(user.id),
-                    first_name=str(user.first_name),
-                    last_name=str(user.last_name) if user.last_name else '',
-                    phone='' if not user.phone else str(user.phone),
-                    add_phone_privacy_exception=False
-                ))
-                sleepAfterAwhile.append(user)
-
-                if len(sleepAfterAwhile) > 4:
-                    if notifyUser:
-                        await _sendMessageToMainAccount(sleepAfterAwhile)
-                    await sleep(61)
-                    sleepAfterAwhile.clear()
+chats = []
+groups = []
 
 
-            except Exception as err:
-                LOGS.error(err)
-                await _sendMessageToMainAccount(user, str(err))
+async def listChats():
+    result = await bot(GetDialogsRequest(
+        offset_date=None,
+        offset_id=0,
+        offset_peer=InputPeerEmpty(),
+        limit=200,
+        hash=0
+    ))
+    chats.extend(result.chats)
+
+    for chat in chats:
+        try:
+            if chat.megagroup == True:
+                groups.append(chat)
+        except:
+            continue
+
+
+@register(outgoing=True, pattern='.csv$')
+async def dumpToCsv(event):
+    args = extract_args(event)
+
+    if not args:
+        await listChats()
+        await bot.send_message(event.chat_id, '[+] Lütfen üye dizlamak istediginiz bir grup secin. :')
+
+        i = 0
+        for g in groups:
+            await bot.send_message(event.chat_id, f'[{i}] - {g.title}')
+            i += 1
+    else:
+        target_group = groups[int(args)]
+        all_participants = await bot.get_participants(target_group, filter=ChannelParticipantsRecent, aggressive=True)
+
+        with open("members.csv", "w", encoding='UTF-8') as f:
+            writer = csv.writer(f, delimiter=",", lineterminator="\n")
+            writer.writerow(['username', 'user id', 'access hash', 'name', 'group', 'group id'])
+            for user in all_participants:
+                print(user)
+                if not user.bot:
+                    if user.username:
+                        username = user.username
+                    else:
+                        username = ""
+                    if user.first_name:
+                        first_name = user.first_name
+                    else:
+                        first_name = ""
+                    if user.last_name:
+                        last_name = user.last_name
+                    else:
+                        last_name = ""
+                    name = (first_name + ' ' + last_name).strip()
+                    writer.writerow([username, user.id, user.access_hash, name, target_group.title, target_group.id])
+
+        await bot.send_file('me', 'members.csv')
+
+        await event.edit('[+] Members scraped successfully.')
+
+
+@register(outgoing=True, pattern='.import$')
+async def importCsv(event):
+    args = extract_args(event)
+
+    if not args:
+        await listChats()
+        await bot.send_message(event.chat_id, '[+] Choose a group to add members :')
+
+        i = 0
+        for g in groups:
+            await bot.send_message(event.chat_id, f'[{i}] - {g.title}')
+            i += 1
+    else:
+        users = []
+        input_file = await event.get_reply_message()
+
+        if not input_file.media:
+            await event.edit(message('Lütfen bana bir CSV üye dosyasi verin.'))
+
+        dosya = await bot.download_file(input_file.media.document,
+                                        'importMembers.csv')
+        target_group = groups[int(args)]
+
+        with open('importMembers.csv', encoding='UTF-8') as f:
+            rows = csv.reader(f, delimiter=",", lineterminator="\n")
+            next(rows, None)
+            for row in rows:
+                user = {}
+                user['username'] = row[0]
+                user['id'] = int(row[1])
+                user['access_hash'] = int(row[2])
+                user['name'] = row[3]
+                users.append(user)
+        n = 0
+        for user in users:
+            n += 1
+            user_to_add = InputPeerUser(user['id'], user['access_hash'])
+            target_group_entity = InputPeerChannel(target_group.id, target_group.access_hash)
+
+            if n != 49:
+                # time.sleep(1)
+                try:
+                    await event.edit(message("`{}` id'li kullaniciyi gruba ekliyorum..".format(user['id'])))
+
+                    await bot(InviteToChannelRequest(target_group_entity, [user_to_add]))
+                    # time.sleep(15)
+                except PeerFloodError:
+                    await event.edit(message(
+                        "[!] Flood uyarısı alıyorum, \n[!] Üye ekleme durduruluyor.. \n"
+                        "[!] Lütfen daha sonra tekrar deneyiniz.")
+                    )
+                    break
+                except UserPrivacyRestrictedError:
+                    continue
+                except ChatWriteForbiddenError:
+                    await event.edit(message('Bu gruba üye ekleme izniniz yok.'))
+                    continue
+                except UserNotMutualContactError:
+                    continue
+                except Exception as e:
+                    traceback.print_exc()
+                    continue
+            else:
+                await sleep(15)
 
 
 async def _sendMessageToMainAccount(users, message=''):
@@ -75,38 +170,7 @@ async def _sendMessageToMainAccount(users, message=''):
     await bot.send_message(sendToUser, msg)
 
 
-@register(outgoing=True, pattern='.kes')
-async def _stopPullingUsers(event):
-    global stopPullingUsers
-    stopPullingUsers = True
-    await event.edit('Ben kactim arkadaslar, kendinize iyi baghin')
-
-
-@register(outgoing=True, pattern='.as')
-async def uyebas(event):
-    from .chatinfo import get_chatinfo
-    await event.edit('`USER DUMP BASLADI (Database yükleniyor..) - by` @hasanisabbah.')
-    await sleep(3)
-    result = await event.client(GetContactsRequest(
-        hash=0
-    ))
-
-    try:
-        chat = await get_chatinfo(event)
-        chat_obj_info = await event.client.get_entity(chat.full_chat.id)
-        channel = chat_obj_info.id
-        users = result.users
-        random.shuffle(users)
-        await event.edit('Eklemeler basladi..')
-        await event.client(InviteToChannelRequest(
-            channel=channel,
-            users=users
-        ))
-    except Exception as e:
-        print(e)
-
-
-@register(outgoing=True, pattern="^.contacts")
+@register(outgoing=True, pattern="^.contacts$")
 async def contactsCount(event):
     try:
         await event.edit('`Rehber yükleniyor...`')
