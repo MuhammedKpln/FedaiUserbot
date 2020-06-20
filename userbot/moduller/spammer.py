@@ -16,7 +16,7 @@
 
 from telethon.events import NewMessage
 
-from userbot import LOGS, CMD_HELP
+from userbot import LOGS, CMD_HELP, BOTLOG, BOTLOG_CHATID
 from userbot.events import extract_args, register
 from userbot.moduller.helpers import message
 
@@ -102,9 +102,28 @@ async def rmspam(e: NewMessage.Event) -> None:
         await e.edit(message(f'{spam_name} ismiyle herhangi bir spam bulunamadi.'))
 
 
+@register(outgoing=True, pattern="^.bigspam")
+async def bigspam(e):
+    if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
+        message = e.text
+        messageSplit = message.split(" ", 2)
+        counter = int(messageSplit[1])
+        spam_message = str(messageSplit[2])
+        for i in range(1, counter):
+            await e.respond(spam_message)
+        await e.delete()
+        if BOTLOG:
+            await e.client.send_message(
+                BOTLOG_CHATID,
+                "#BIGSPAM \n\n"
+                "Bigspam başarıyla gerçekleştirildi"
+                )
+
+
 CMD_HELP.update({
     'spam': message('Kaydettiğiniz spamı gösterir'),
     'spamekle': message('Yeni bir spam ekler \n\n Kullanım: .spamekle spamİsmi spam'),
     'spamsil': message('Kaydettiğiniz spami siler \n\n Kullanım: .spamsil spamİsmi'),
-    'kspam': message('Tüm spamlerinizi listeler.')
+    'kspam': message('Tüm spamlerinizi listeler.'),
+    'bigspam': message('Kullanim: .bigspam <miktar> <metin>')
 })
