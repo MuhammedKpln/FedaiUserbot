@@ -122,7 +122,7 @@ async def bigspam(e):
 
 CMD_HELP.update({
     'spam': message('Kaydettiğiniz spamı gösterir'),
-    'spamekle': message('Yeni bir spam ekler \n\n Kullanım: .spamekle spamİsmi spam'),
+    'spamkaydet': message('Yeni bir spam ekler \n\n Kullanım: .spamkaydet spamİsmi spam'),
     'spamsil': message('Kaydettiğiniz spami siler \n\n Kullanım: .spamsil spamİsmi'),
     'kspam': message('Tüm spamlerinizi listeler.'),
     'bigspam': message('Kullanim: .bigspam <miktar> <metin>')
