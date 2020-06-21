@@ -30,6 +30,7 @@
     "HEROKU_APIKEY": {
       "description": "Heroku API Key, 'https://dashboard.heroku.com/account' adresinden alın.",
       "value": ""
+      "required": false
     },
     "HEROKU_APPNAME": {
       "description": "Heroku uygulama adını buraya ekleyin. UserBot güncellemelerine yardımcı olur.",
