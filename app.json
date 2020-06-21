@@ -17,15 +17,15 @@
   "env": {
     "API_KEY": {
       "description": "Bu değeri my.telegram.org adresinden alın.",
-      "required": true
+      "required": false
     },
     "API_HASH": {
       "description": "Bu değeri my.telegram.org adresinden alın.",
-      "required": true
+      "required": false
     },
     "STRING_SESSION": {
       "description": "python3 GenerateStringSession.py dosyasını yerel olarak çalıştırarak bu değeri alın.",
-      "required": true
+      "required": false
     },
     "HEROKU_APIKEY": {
       "description": "Heroku API Key, 'https://dashboard.heroku.com/account' adresinden alın.",
@@ -33,7 +33,7 @@
     },
     "HEROKU_APPNAME": {
       "description": "Heroku uygulama adını buraya ekleyin. UserBot güncellemelerine yardımcı olur.",
-      "required": true
+      "required": false
     },
     "UPSTREAM_REPO_URL": {
       "description": "Fork sağlamanız durumunda repo URL'nizi buraya ekleyin. Varsayılan olarak kendi repo adresimiz eklidir.",
