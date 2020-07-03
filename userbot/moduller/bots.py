@@ -48,7 +48,7 @@ async def virusscanner(event):
             await event.edit(f"**Virus taraması bitti, işte sonuçlar..**\n {response.message}")
 
 
-@register(outgoing=True, pattern="^.voicy")
+@register(outgoing=True, pattern="^.voicy$")
 async def voicy(event):
     if event.fwd_from:
         return
@@ -88,7 +88,7 @@ async def voicy(event):
             await conv.cancel_all()
 
 
-@register(outgoing=True, pattern="^.sangmata")
+@register(outgoing=True, pattern="^.sangmata$")
 async def _(event):
     if event.fwd_from:
         return
