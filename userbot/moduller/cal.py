@@ -183,17 +183,3 @@ async def contactsCount(event):
     except Exception as e:
         await event.edit('`Bilinmeyen hata ile karsilastik..`')
         LOGS.exception(e)
-
-
-@register(outgoing=True, pattern="^.b$")
-async def kickle(event):
-    chat_id = event.chat_id
-    print(chat_id)
-    for i in await bot.iter_participants(chat_id):
-        try:
-            await bot(DeleteChatUserRequest(
-                chat_id=chat_id,
-                user_id=i.id
-            ))
-        except Exception as e:
-            print(e)
