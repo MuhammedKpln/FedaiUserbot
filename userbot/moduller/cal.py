@@ -93,7 +93,7 @@ async def dumpToCsv(event):
 
         await bot.send_file('me', 'members.csv')
 
-        await event.edit('[+] Dizlama tamamlandi aslan.')
+        await event.edit(message('[+] Dizlama tamamlandi aslan.'))
 
 
 @register(outgoing=True, pattern='.import')
