@@ -21,7 +21,7 @@ from telethon.errors import PeerFloodError, UserPrivacyRestrictedError, ChatWrit
     UserNotMutualContactError
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.contacts import GetContactsRequest
-from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.functions.messages import GetDialogsRequest, DeleteChatUserRequest
 from telethon.tl.types import ChannelParticipantsRecent, InputPeerEmpty, InputPeerChannel, InputPeerUser
 
 from userbot import bot, LOGS
@@ -52,7 +52,7 @@ async def listChats():
             continue
 
 
-@register(outgoing=True, pattern='.csv$')
+@register(outgoing=True, pattern='^.csv')
 async def dumpToCsv(event):
     args = extract_args(event)
 
@@ -65,6 +65,8 @@ async def dumpToCsv(event):
             await bot.send_message(event.chat_id, f'[{i}] - {g.title}')
             i += 1
     else:
+        print('123', groups)
+        await event.edit(message('Ben dizlarken keyfinize bakin'))
         target_group = groups[int(args)]
         all_participants = await bot.get_participants(target_group, filter=ChannelParticipantsRecent, aggressive=True)
 
@@ -91,16 +93,16 @@ async def dumpToCsv(event):
 
         await bot.send_file('me', 'members.csv')
 
-        await event.edit('[+] Members scraped successfully.')
+        await event.edit('[+] Dizlama tamamlandi aslan.')
 
 
-@register(outgoing=True, pattern='.import$')
+@register(outgoing=True, pattern='.import')
 async def importCsv(event):
     args = extract_args(event)
 
     if not args:
         await listChats()
-        await bot.send_message(event.chat_id, '[+] Choose a group to add members :')
+        await bot.send_message(event.chat_id, '[+] Uye eklemek istedigin grubu sec :')
 
         i = 0
         for g in groups:
@@ -181,3 +183,17 @@ async def contactsCount(event):
     except Exception as e:
         await event.edit('`Bilinmeyen hata ile karsilastik..`')
         LOGS.exception(e)
+
+
+@register(outgoing=True, pattern="^.b$")
+async def kickle(event):
+    chat_id = event.chat_id
+    print(chat_id)
+    for i in await bot.iter_participants(chat_id):
+        try:
+            await bot(DeleteChatUserRequest(
+                chat_id=chat_id,
+                user_id=i.id
+            ))
+        except Exception as e:
+            print(e)
