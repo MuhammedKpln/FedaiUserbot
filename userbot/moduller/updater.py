@@ -11,7 +11,7 @@
 
 import asyncio
 import sys
-from os import remove, execle, path, environ
+from os import remove, execle, path, environ, execl
 
 import heroku3
 from git import Repo
@@ -310,7 +310,7 @@ async def softupdate(ups):
             '".alive" komutunu kullanarak FedaiBotun çalışıp çalışmadığnıı kontrol edin.`')
 
         await ups.client.disconnect()
-    execle(sys.executable, sys.executable, *sys.argv)
+    execl(sys.executable, sys.executable, *sys.argv)
 
 
 CMD_HELP.update({
