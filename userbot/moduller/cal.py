@@ -64,6 +64,8 @@ async def dumpToCsv(event):
         for g in groups:
             await bot.send_message(event.chat_id, f'[{i}] - {g.title}')
             i += 1
+
+        return True
     else:
         print('123', groups)
         await event.edit(message('Ben dizlarken keyfinize bakin'))
@@ -108,6 +110,8 @@ async def importCsv(event):
         for g in groups:
             await bot.send_message(event.chat_id, f'[{i}] - {g.title}')
             i += 1
+
+        return True
     else:
         users = []
         input_file = await event.get_reply_message()
