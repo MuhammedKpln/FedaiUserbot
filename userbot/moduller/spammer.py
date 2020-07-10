@@ -26,7 +26,7 @@ except Exception as e:
     LOGS.error(e)
 
 
-@register(outgoing=True, pattern='^.spam ?(.*)')
+@register(outgoing=True, pattern='^.spam ?(.*)$')
 async def getspam(e: NewMessage.Event) -> None:
     spam_name = extract_args(e)
     print(spam_name)
@@ -42,7 +42,7 @@ async def getspam(e: NewMessage.Event) -> None:
         await e.edit(message(f'{spam_name} ismiyle herhangi bir spam bulunamadi.'))
 
 
-@register(outgoing=True, pattern="^.spamkaydet ?(.*)")
+@register(outgoing=True, pattern="^.spamkaydet ?(.*)$")
 async def add_new_spam(e):
     await e.edit('**FEDAI**: `Peki, bana bir dakika verin, yeni spamınız kaydoluyor..`')
 
@@ -84,7 +84,7 @@ async def spams(e: NewMessage.Event) -> None:
     await e.edit(transact)
 
 
-@register(outgoing=True, pattern='^.spamsil ?(.*)')
+@register(outgoing=True, pattern='^.spamsil ?(.*)$')
 async def rmspam(e: NewMessage.Event) -> None:
     spam_name = extract_args(e)
 
@@ -102,7 +102,7 @@ async def rmspam(e: NewMessage.Event) -> None:
         await e.edit(message(f'{spam_name} ismiyle herhangi bir spam bulunamadi.'))
 
 
-@register(outgoing=True, pattern="^.bigspam")
+@register(outgoing=True, pattern="^.bigspam$")
 async def bigspam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
