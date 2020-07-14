@@ -29,7 +29,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins,
                                ChatAdminRights, ChatBannedRights,
                                MessageEntityMentionName, MessageMediaPhoto,
-                               ChannelParticipantsBots)
+                               ChannelParticipantsBots, UserStatusLastWeek, UserStatusLastMonth)
 
 from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP
 from userbot.events import extract_args, register
@@ -571,7 +571,8 @@ async def rm_deletedacc(show):
         await show.edit("`hayalet / silinmiş / zombi hesaplar aranıyor...`")
         async for user in show.client.iter_participants(show.chat_id):
 
-            if user.deleted:
+            if user.deleted or isinstance(user.status, UserStatusLastWeek) or isinstance(user.status,
+                                                                                         UserStatusLastMonth):
                 del_u += 1
                 await sleep(1)
         if del_u > 0:
@@ -589,12 +590,13 @@ async def rm_deletedacc(show):
         await show.edit("`Yönetici değilim!`")
         return
 
-    await show.edit("`Silinmiş hesaplar çıkarılıyor...`")
+    await show.edit("`Silinmiş hesaplar ve son gorülmesi yüksek olan kullanıcılar çıkarılıyor...`")
     del_u = 0
     del_a = 0
 
     async for user in show.client.iter_participants(show.chat_id):
-        if user.deleted:
+        if user.deleted or isinstance(user.status, UserStatusLastWeek) or isinstance(user.status, UserStatusLastMonth):
+
             try:
                 await show.client(
                     EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
