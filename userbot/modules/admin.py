@@ -571,9 +571,11 @@ async def rm_deletedacc(show):
         await show.edit("`hayalet / silinmiş / son görüldüsü yüksek olan zombi hesaplar aranıyor...`")
         async for user in show.client.iter_participants(show.chat_id):
             if user.deleted or isinstance(user.status, UserStatusLastWeek) or isinstance(user.status,
+
                                                                                          UserStatusLastMonth) or user.status is None:
-                del_u += 1
-                await sleep(1)
+                if not user.bot:
+                    del_u += 1
+                    await sleep(1)
         print(del_u)
         if del_u > 0:
             del_status = f"**`Bu grupta` **{del_u}** `tane hayalet / silinmiş / son görüldüsü yüksek olan zombi hesap bulundu,\
@@ -599,8 +601,9 @@ async def rm_deletedacc(show):
                                                                                      UserStatusLastMonth) or user.status is None:
 
             try:
-                await show.client(
-                    EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
+                if not user.bot:
+                    await show.client(
+                        EditBannedRequest(show.chat_id, user.id, BANNED_RIGHTS))
             except UserAdminInvalidError:
                 del_u -= 1
                 del_a += 1
