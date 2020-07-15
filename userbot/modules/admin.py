@@ -568,14 +568,15 @@ async def rm_deletedacc(show):
     del_status = "`Silinmiş hesap bulunamadı, grup temiz`"
 
     if con != "clean":
-        await show.edit("`hayalet / silinmiş / zombi hesaplar aranıyor...`")
+        await show.edit("`hayalet / silinmiş / son görüldüsü yüksek olan zombi hesaplar aranıyor...`")
         async for user in show.client.iter_participants(show.chat_id):
             if user.deleted or isinstance(user.status, UserStatusLastWeek) or isinstance(user.status,
-                                                                                         UserStatusLastMonth) or not user.status:
+                                                                                         UserStatusLastMonth) or user.status is None:
                 del_u += 1
                 await sleep(1)
+        print(del_u)
         if del_u > 0:
-            del_status = f"**`Bu grupta` **{del_u}** `tane hayalet / silinmiş / zombi hesap bulundu,\
+            del_status = f"**`Bu grupta` **{del_u}** `tane hayalet / silinmiş / son görüldüsü yüksek olan zombi hesap bulundu,\
             \ntemizlemek için --.zombies clean-- komutunu kullanın`"
         await show.edit(del_status)
         return
@@ -595,7 +596,7 @@ async def rm_deletedacc(show):
 
     async for user in show.client.iter_participants(show.chat_id):
         if user.deleted or isinstance(user.status, UserStatusLastWeek) or isinstance(user.status,
-                                                                                     UserStatusLastMonth) or not user.status:
+                                                                                     UserStatusLastMonth) or user.status is None:
 
             try:
                 await show.client(
