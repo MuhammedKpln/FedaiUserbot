@@ -102,7 +102,7 @@ async def rmspam(e: NewMessage.Event) -> None:
         await e.edit(message(f'{spam_name} ismiyle herhangi bir spam bulunamadi.'))
 
 
-@register(outgoing=True, pattern="^.bigspam$")
+@register(outgoing=True, pattern="^.bigspam")
 async def bigspam(e):
     if not e.text[0].isalpha() and e.text[0] not in ("/", "#", "@", "!"):
         message = e.text
