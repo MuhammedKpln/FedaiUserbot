@@ -46,8 +46,8 @@ async def permitpm(event):
         if event.is_private and event.chat_id != 777000 and event.chat_id != self_user.id and not (
                 await event.get_sender()).bot:
             try:
-                from userbot.moduller.sql_helper.pm_permit_sql import is_approved
-                from userbot.moduller.sql_helper.globals import gvarstatus
+                from userbot.modules.sql_helper.pm_permit_sql import is_approved
+                from userbot.modules.sql_helper.globals import gvarstatus
             except:
                 return
             apprv = is_approved(event.chat_id)
@@ -124,7 +124,7 @@ async def auto_accept(event):
     if event.is_private and event.chat_id != 777000 and event.chat_id != self_user.id and not (
             await event.get_sender()).bot:
         try:
-            from userbot.moduller.sql_helper.pm_permit_sql import approve, is_approved
+            from userbot.modules.sql_helper.pm_permit_sql import approve, is_approved
         except:
             return
 
@@ -153,7 +153,7 @@ async def auto_accept(event):
 async def notifoff(noff_event):
     """ .notifoff komutu onaylanmamış kişilerden gelen PM lerden bildirim almamanızı sağlar. """
     try:
-        from userbot.moduller.sql_helper.globals import addgvar
+        from userbot.modules.sql_helper.globals import addgvar
     except:
         await noff_event.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -165,7 +165,7 @@ async def notifoff(noff_event):
 async def notifon(non_event):
     """ .notifon komutu onaylanmamış kişilerden gelen PM lerden bildirim almanızı sağlar. """
     try:
-        from userbot.moduller.sql_helper.globals import delgvar
+        from userbot.modules.sql_helper.globals import delgvar
     except:
         await non_event.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -180,7 +180,7 @@ async def approvepm(apprvpm):
         UNAPPROVED_MSG = PM_USER_MSG
     """ .approve komutu herhangi birine PM atabilme izni verir. """
     try:
-        from userbot.moduller.sql_helper.pm_permit_sql import approve
+        from userbot.modules.sql_helper.pm_permit_sql import approve
     except:
         await apprvpm.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -223,7 +223,7 @@ async def approvepm(apprvpm):
 @register(outgoing=True, pattern="^.disapprove$")
 async def disapprovepm(disapprvpm):
     try:
-        from userbot.moduller.sql_helper.pm_permit_sql import dissprove
+        from userbot.modules.sql_helper.pm_permit_sql import dissprove
     except:
         await disapprvpm.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -275,7 +275,7 @@ async def blockpm(block):
         uid = block.chat_id
 
     try:
-        from userbot.moduller.sql_helper.pm_permit_sql import dissprove
+        from userbot.modules.sql_helper.pm_permit_sql import dissprove
         dissprove(uid)
     except:
         pass

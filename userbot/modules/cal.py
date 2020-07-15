@@ -26,7 +26,7 @@ from telethon.tl.types import ChannelParticipantsRecent, InputPeerEmpty, InputPe
 
 from userbot import bot, LOGS
 from userbot.events import register, extract_args
-from userbot.moduller.helpers import message
+from userbot.modules.helpers import message
 
 stopPullingUsers = False
 

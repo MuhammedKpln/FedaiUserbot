@@ -35,7 +35,7 @@ async def pins(event):
         return
 
     await event.edit("`Dosya indiriliyor...`")
-    dosya = await event.client.download_media(data, os.getcwd() + "/userbot/moduller/")
+    dosya = await event.client.download_media(data, os.getcwd() + "/userbot/modules/")
 
     if PLUGIN_CHANNEL_ID != None:
         await reply_message.forward_to(PLUGIN_CHANNEL_ID)
@@ -50,7 +50,7 @@ async def pins(event):
         spec.loader.exec_module(mod)
     except Exception as e:
         await event.edit(f"`Yükleme başarısız! Plugin hatalı.\n\nHata: {e}`")
-        os.remove(os.getcwd() + "/userbot/moduller/" + dosya)
+        os.remove(os.getcwd() + "/userbot/modules/" + dosya)
         return
 
     dosy = open(dosya, "r").read()
@@ -120,7 +120,7 @@ async def pinstallall(event):
 
             raw_name = plugin.file.name
             file_name = str(plugin.file.name).strip('.')[0]
-            modules_folder = os.getcwd() + "/userbot/moduller/"
+            modules_folder = os.getcwd() + "/userbot/modules/"
 
             if str(plugin.file.name).endswith('.py'):
 
@@ -151,7 +151,7 @@ async def premove(event):
     plugin_to_be_removed = extract_args(event)
     async for plugin in event.client.iter_messages(PLUGIN_CHANNEL_ID, search=plugin_to_be_removed):
         print(plugin)
-        modules_folder = os.getcwd() + "/userbot/moduller/"
+        modules_folder = os.getcwd() + "/userbot/modules/"
 
         if plugin_to_be_removed.endswith('.py'):
 

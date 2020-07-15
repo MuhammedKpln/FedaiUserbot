@@ -317,7 +317,7 @@ async def spider(spdr):
     """
     # Fonksiyonun SQL modu altında çalışıp çalışmadığını kontrol et
     try:
-        from userbot.moduller.sql_helper.spam_mute_sql import mute
+        from userbot.modules.sql_helper.spam_mute_sql import mute
     except:
         await spdr.edit(NO_SQL)
         return
@@ -398,7 +398,7 @@ async def unmoot(unmot):
 
     # Fonksiyonun SQL modu altında çalışıp çalışmadığını kontrol et
     try:
-        from userbot.moduller.sql_helper.spam_mute_sql import unmute
+        from userbot.modules.sql_helper.spam_mute_sql import unmute
     except:
         await unmot.edit(NO_SQL)
         return
@@ -436,8 +436,8 @@ async def unmoot(unmot):
 async def muter(moot):
     """ Sessize alınan kullanıcıların mesajlarını silmek için kullanılır """
     try:
-        from userbot.moduller.sql_helper.spam_mute_sql import is_muted
-        from userbot.moduller.sql_helper.gmute_sql import is_gmuted
+        from userbot.modules.sql_helper.spam_mute_sql import is_muted
+        from userbot.modules.sql_helper.gmute_sql import is_gmuted
     except:
         return
     muted = is_muted(moot.chat_id)
@@ -481,7 +481,7 @@ async def ungmoot(un_gmute):
 
     # Fonksiyonun SQL modu altında çalışıp çalışmadığını kontrol et
     try:
-        from userbot.moduller.sql_helper.gmute_sql import ungmute
+        from userbot.modules.sql_helper.gmute_sql import ungmute
     except:
         await un_gmute.edit(NO_SQL)
         return
@@ -523,7 +523,7 @@ async def gspider(gspdr):
 
     # Fonksiyonun SQL modu altında çalışıp çalışmadığını kontrol et
     try:
-        from userbot.moduller.sql_helper.gmute_sql import gmute
+        from userbot.modules.sql_helper.gmute_sql import gmute
     except:
         await gspdr.edit(NO_SQL)
         return

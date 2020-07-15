@@ -25,7 +25,7 @@ async def filter_incoming_handler(handler):
     """ Gelen mesajın filtre tetikleyicisi içerip içermediğini kontrol eder """
     if not (await handler.get_sender()).bot:
         try:
-            from userbot.moduller.sql_helper.filter_sql import get_filters
+            from userbot.modules.sql_helper.filter_sql import get_filters
         except:
             await handler.edit("`Bot Non-SQL modunda çalışıyor!!`")
             return
@@ -47,7 +47,7 @@ async def filter_incoming_handler(handler):
 async def add_new_filter(new_handler):
     """ .filter komutu bir sohbete yeni filtreler eklemeye izin verir """
     try:
-        from userbot.moduller.sql_helper.filter_sql import add_filter
+        from userbot.modules.sql_helper.filter_sql import add_filter
     except:
         await new_handler.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -92,7 +92,7 @@ async def add_new_filter(new_handler):
 async def remove_a_filter(r_handler):
     """ .stop komutu bir filtreyi durdurmanızı sağlar. """
     try:
-        from userbot.moduller.sql_helper.filter_sql import remove_filter
+        from userbot.modules.sql_helper.filter_sql import remove_filter
     except:
         await r_handler.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
@@ -138,7 +138,7 @@ async def kick_marie_filter(event):
 async def filters_active(event):
     """ .filters komutu bir sohbetteki tüm aktif filtreleri gösterir. """
     try:
-        from userbot.moduller.sql_helper.filter_sql import get_filters
+        from userbot.modules.sql_helper.filter_sql import get_filters
     except:
         await event.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return

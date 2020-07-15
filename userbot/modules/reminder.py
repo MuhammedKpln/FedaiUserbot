@@ -3,7 +3,7 @@ import re
 
 from userbot import bot, CMD_HELP
 from userbot.events import extract_args, register
-from userbot.moduller.helpers import message
+from userbot.modules.helpers import message
 
 plugin_category = "user"
 regexp = re.compile(r"(\d+)(h|g|sn|d|s)?")

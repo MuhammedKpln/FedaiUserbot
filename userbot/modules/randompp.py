@@ -27,7 +27,7 @@ from telethon.tl.functions.photos import UploadProfilePhotoRequest
 
 from userbot import bot, LOGS, CMD_HELP
 from userbot.events import register
-from userbot.moduller.helpers import message
+from userbot.modules.helpers import message
 
 TEMP_DIR = tempfile.gettempdir()
 REDDIT_URL = 'https://www.reddit.com/r/wallpaper/top.json'

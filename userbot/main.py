@@ -4,7 +4,7 @@
 from importlib import import_module
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 from . import LOGS, bot
-from .moduller import ALL_MODULES
+from .modules import ALL_MODULES
 
 INVALID_PH = '\nHATA: Girilen telefon numarası geçersiz' \
              '\n  Ipucu: Ülke kodunu kullanarak numaranı gir' \
@@ -18,7 +18,7 @@ except PhoneNumberInvalidError:
 
 for module_name in ALL_MODULES:
     try:
-        import_module("userbot.moduller." + module_name)
+        import_module("userbot.modules." + module_name)
     except Exception as e:
         print(e)
         LOGS.warn(f"{module_name} modülü yüklenirken bir hata oluştu.")

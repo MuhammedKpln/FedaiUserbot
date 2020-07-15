@@ -25,7 +25,7 @@ from userbot.events import extract_args, register
 async def blacklist_init():
     try:
         global sql
-        sql = import_module("userbot.moduller.sql_helper.blacklist_sql")
+        sql = import_module("userbot.modules.sql_helper.blacklist_sql")
     except:
         sql = None
         LOGS.warn('Karaliste özelliği çalıştırılamıyor, SQL bağlantısı bulunamadı')

@@ -24,7 +24,7 @@ from userbot.events import register
 
 async def lydia_init():
     try:
-        from userbot.moduller.sql_helper.lydia_sql import get_s, get_all_s, add_s, remove_s
+        from userbot.modules.sql_helper.lydia_sql import get_s, get_all_s, add_s, remove_s
     except:
         LOGS.warn("Lydia veritabanı bağlantısı başarısız oldu")
 

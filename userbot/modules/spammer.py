@@ -18,10 +18,10 @@ from telethon.events import NewMessage
 
 from userbot import LOGS, CMD_HELP, BOTLOG, BOTLOG_CHATID
 from userbot.events import extract_args, register
-from userbot.moduller.helpers import message
+from userbot.modules.helpers import message
 
 try:
-    from userbot.moduller.sql_helper.spam import add_spam, remove_spam, get_spam, get_spams
+    from userbot.modules.sql_helper.spam import add_spam, remove_spam, get_spam, get_spams
 except Exception as e:
     LOGS.error(e)
 

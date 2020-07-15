@@ -38,8 +38,8 @@ def register(**args):
     trigger_on_inline = args.get('trigger_on_inline', False)
     disable_errors = args.get('disable_errors', False)
 
-    if pattern and '.' in pattern[:2]:
-        args['pattern'] = pattern = pattern.replace('.', '[.?]')
+    if pattern is not None and not pattern.startswith('(?i)'):
+        args['pattern'] = '(?i)' + pattern
 
     if "disable_edited" in args:
         del args['disable_edited']
@@ -59,87 +59,97 @@ def register(**args):
     if "trigger_on_inline" in args:
         del args['trigger_on_inline']
 
+    if pattern:
+        if not ignore_unsafe:
+            args['pattern'] = pattern.replace('^.', unsafe_pattern, 1)
+
     def decorator(func):
         async def wrapper(check):
-            if check.edit_date and check.is_channel and not check.is_group:
+            if not LOGSPAMMER:
+                send_to = check.chat_id
+            else:
+                send_to = BOTLOG_CHATID
+
+            if not trigger_on_fwd and check.fwd_from:
                 return
+
+            if check.via_bot_id and not trigger_on_inline:
+                return
+
             if groups_only and not check.is_group:
-                await check.respond("`Bunun bir grup olduğuna emin misin?`")
-                return
-            if check.via_bot_id and check.out:
+                await check.respond("`Bunun bir grup olduğunu sanmıyorum.`")
                 return
 
             try:
-                if me.id not in BLACKLIST:
-                    await func(check)
-                else:
-                    raise RetardsException()
+                await func(check)
+
+
             except events.StopPropagation:
                 raise events.StopPropagation
-            except RetardsException:
-                exit(1)
             except KeyboardInterrupt:
                 pass
-            except:
+            except BaseException:
+
                 if not disable_errors:
-                    try:
-                        date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
-                        text = "**USERBOT HATA RAPORU**\n"
-                        link = "[Fedai Destek Grubu](https://t.me/FedaiUserBotSupport)"
-                        text += "İsterseniz, bunu rapor edebilirsiniz "
-                        text += f"- sadece bu mesajı buraya iletin {link}.\n"
-                        text += "Hata ve Tarih dışında hiçbir şey kaydedilmez\n"
+                    text = "**USERBOT HATA RAPORU**\n"
+                    link = "[Asena Destek Grubu](https://t.me/AsenaSupport)"
+                    text += "İsterseniz, bunu rapor edebilirsiniz"
+                    text += f"- sadece bu mesajı buraya iletin {link}.\n"
+                    text += "Hata ve Tarih dışında hiçbir şey kaydedilmez\n"
 
-                        ftext = "========== UYARI =========="
-                        ftext += "\nBu dosya sadece burada yüklendi,"
-                        ftext += "\nsadece hata ve tarih kısmını kaydettik,"
-                        ftext += "\ngizliliğinize saygı duyuyoruz,"
-                        ftext += "\nburada herhangi bir gizli veri varsa"
-                        ftext += "\nbu hata raporu olmayabilir, kimse verilerinize ulaşamaz.\n"
-                        ftext += "================================\n\n"
-                        ftext += "--------USERBOT HATA GUNLUGU--------\n"
-                        ftext += "\nTarih: " + date
-                        ftext += "\nGrup ID: " + str(check.chat_id)
-                        ftext += "\nGönderen kişinin ID: " + \
-                            str(check.sender_id)
-                        ftext += "\n\nOlay Tetikleyici:\n"
-                        ftext += str(check.text)
-                        ftext += "\n\nGeri izleme bilgisi:\n"
-                        ftext += str(format_exc())
-                        ftext += "\n\nHata metni:\n"
-                        ftext += str(sys.exc_info()[1])
-                        ftext += "\n\n--------USERBOT HATA GUNLUGU BITIS--------"
+                    ftext = "========== UYARI =========="
+                    ftext += "\nBu dosya sadece burada yüklendi,"
+                    ftext += "\nsadece hata ve tarih kısmını kaydettik,"
+                    ftext += "\ngizliliğinize saygı duyuyoruz,"
+                    ftext += "\nburada herhangi bir gizli veri varsa"
+                    ftext += "\nbu hata raporu olmayabilir, kimse verilerinize ulaşamaz.\n"
+                    ftext += "================================\n\n"
+                    ftext += "--------USERBOT HATA GUNLUGU--------\n"
+                    ftext += "\nTarih: " + date
+                    ftext += "\nGrup ID: " + str(check.chat_id)
+                    ftext += "\nGönderen kişinin ID: " + str(check.sender_id)
+                    ftext += "\n\nOlay Tetikleyici:\n"
+                    ftext += str(check.text)
+                    ftext += "\n\nGeri izleme bilgisi:\n"
+                    ftext += str(format_exc())
+                    ftext += "\n\nHata metni:\n"
+                    ftext += str(sys.exc_info()[1])
+                    ftext += "\n\n--------USERBOT HATA GUNLUGU BITIS--------"
 
-                        command = "git log --pretty=format:\"%an: %s\" -10"
+                    command = "git log --pretty=format:\"%an: %s\" -10"
 
-                        ftext += "\n\n\nSon 10 commit:\n"
+                    ftext += "\n\n\nSon 10 commit:\n"
 
-                        process = await asyncsubshell(command,
-                                                      stdout=asyncsub.PIPE,
-                                                      stderr=asyncsub.PIPE)
-                        stdout, stderr = await process.communicate()
-                        result = str(stdout.decode().strip()) \
-                            + str(stderr.decode().strip())
+                    process = await asyncsubshell(command,
+                                                  stdout=asyncsub.PIPE,
+                                                  stderr=asyncsub.PIPE)
+                    stdout, stderr = await process.communicate()
+                    result = str(stdout.decode().strip()) \
+                             + str(stderr.decode().strip())
 
-                        ftext += result
+                    ftext += result
 
-                        file = open("hata.log", "w+")
-                        file.write(ftext)
-                        file.close()
+                    file = open("error.log", "w+")
+                    file.write(ftext)
+                    file.close()
 
-                        await check.client.send_file(BOTLOG_CHATID
-                                                     if BOTLOG
-                                                     else me.id, "hata.log", caption=text, )
-                        remove("hata.log")
-                    except:
-                        pass
+                    if LOGSPAMMER:
+                        await check.client.respond("`Üzgünüm, UserBot'um çöktü.\
+                        \nHata günlükleri UserBot günlük grubunda saklanır.`")
+
+                    await check.client.send_file(send_to,
+                                                 "error.log",
+                                                 caption=text)
+                    remove("error.log")
             else:
                 pass
 
         if not disable_edited:
             bot.add_event_handler(wrapper, events.MessageEdited(**args))
         bot.add_event_handler(wrapper, events.NewMessage(**args))
+
         return wrapper
 
     return decorator
