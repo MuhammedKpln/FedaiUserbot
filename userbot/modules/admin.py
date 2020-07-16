@@ -104,6 +104,8 @@ async def _(e):
                     banned_rights=BANNED_RIGHTS
                 ))
 
+                WARN = 0
+
                 await e.reply(message(f'{message_author.first_name} Banlandın! '))
 
             await e.reply(
