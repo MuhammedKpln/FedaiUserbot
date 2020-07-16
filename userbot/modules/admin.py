@@ -35,6 +35,8 @@ from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP
 from userbot.events import extract_args, register
 
 # =================== CONSTANT ===================
+from userbot.modules.helpers import message
+
 PP_TOO_SMOL = "`Görüntü çok küçük`"
 PP_ERROR = "`Görüntü işleme sırasında hata oluştu`"
 NO_ADMIN = "`Yönetici değilim!`"
@@ -73,6 +75,38 @@ UNBAN_RIGHTS = ChatBannedRights(
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)
 
 UNMUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=False)
+
+WARN = 0
+WARN_AUTHOR = None
+
+
+@register(incoming=True, pattern="^")
+async def _(e):
+    global WARN
+    global WARN_AUTHOR
+    if e.chat_id == -1001354242705:
+        msg = e.message.message
+        message_id = e.message.id
+        message_author = await e.client.get_entity(e.message.from_id)
+
+        # Remove messages that has higher than 200 characters
+        if len(msg) > 200 and not message_author.username.lower().endswith('bot'):
+            WARN = WARN + 1
+            WARN_AUTHOR = message_author.id
+
+            if WARN_AUTHOR == message_author.id and WARN == 3:
+                await e.client(EditBannedRequest(
+                    channel=e.chat_id,
+                    user_id=message_author.id,
+                    banned_rights=BANNED_RIGHTS
+                ))
+
+                await e.reply(message(f'{message_author.first_name} Banlandın! '))
+
+            await e.reply(
+                message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
+
+            await e.client.delete_messages(e.chat_id, [message_id])
 
 
 # ================================================
