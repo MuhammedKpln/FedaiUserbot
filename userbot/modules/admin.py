@@ -90,7 +90,10 @@ async def _(e):
         message_author = await e.client.get_entity(e.message.from_id)
 
         # Remove messages that has higher than 200 characters
-        if len(msg) > 200 and not message_author.username.lower().endswith('bot'):
+        if len(msg) > 200:
+            if message_author.username:
+                if message_author.username.lower().endswith('bot'):
+                    return True
             WARN = WARN + 1
             WARN_AUTHOR = message_author.id
 
