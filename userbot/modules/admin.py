@@ -95,7 +95,9 @@ async def _(e):
                 if message_author.username.lower().endswith('bot'):
                     return True
             WARN = WARN + 1
-            WARN_AUTHOR = message_author.id
+
+
+            print(WARN_AUTHOR)
 
             if WARN_AUTHOR == message_author.id and WARN == 3:
                 await e.client(EditBannedRequest(
@@ -108,6 +110,10 @@ async def _(e):
 
                 await e.reply(message(f'{message_author.first_name} Banlandın! '))
 
+            elif WARN_AUTHOR != message_author.id:
+                WARN = 0
+
+            WARN_AUTHOR = message_author.id
             await e.reply(
                 message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
 
