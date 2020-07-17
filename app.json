@@ -112,6 +112,11 @@
       "value": "#FedaiUserBot",
       "required": false
     },
+    "PROTECT_CHAT": {
+      "description": "Istediginiz sohbeti floodlardan koruyun!. ID gerekli virgul ile ayirin.",
+      "value": "-10098752185,-10045871254",
+      "required": false
+    },
     "LYDIA_API_KEY": {
       "description": "Bu modülün çalışması için CoffeeHouse API'sine ihtiyacı var. 'https://coffeehouse.intellivoid.info/dashboard' Buradan alabilirsiniz.",
       "required": false

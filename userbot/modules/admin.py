@@ -31,7 +31,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins,
                                MessageEntityMentionName, MessageMediaPhoto,
                                ChannelParticipantsBots, UserStatusLastWeek, UserStatusLastMonth)
 
-from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP
+from userbot import BOTLOG, BOTLOG_CHATID, BRAIN_CHECKER, CMD_HELP, PROTECT_CHAT
 from userbot.events import extract_args, register
 
 # =================== CONSTANT ===================
@@ -84,7 +84,13 @@ WARN_AUTHOR = None
 async def _(e):
     global WARN
     global WARN_AUTHOR
-    if e.chat_id == -1001354242705:
+
+    PROTECT_CHATS = PROTECT_CHAT.split(',')
+
+    print(type(e.chat_id), PROTECT_CHATS)
+
+    if str(e.chat_id) in PROTECT_CHATS:
+        print('sea')
         msg = e.message.message
         message_id = e.message.id
         message_author = await e.client.get_entity(e.message.from_id)
