@@ -19,6 +19,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from userbot import bot, CMD_HELP
 from userbot.events import register
+from userbot.modules.helpers import message
 
 
 @register(outgoing=True, pattern=".tara ?(.*)")
@@ -53,35 +54,38 @@ async def voicy(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        await event.edit("`Herhangi bir kullanıcı mesajına cevap verin.`")
+        await event.edit(message("Herhangi bir kullanıcı mesajına cevap verin."))
         return
     reply_message = await event.get_reply_message()
     if not reply_message.voice:
-        await event.edit("`Mesaja cevap verin.`")
+        await event.edit(message("Lütfen herhangi bir ses kaydını alıntılayın."))
         return
     chat = "@voicybot"
     sender = reply_message.sender
     if reply_message.sender.bot:
-        await event.edit("`Botlara cevap veremezsiniz.`")
+        await event.edit(message("Botlara cevap veremezsiniz."))
         return
-    await event.edit("`İşleniyor...`")
+    await event.edit(message("İşleniyor..."))
     async with bot.conversation(chat, exclusive=False) as conv:
         response = None
         try:
             msg = await reply_message.forward_to(chat)
-            await event.edit('`Sizi 3 saniye bekletmek zorunda kalacam..`')
+            await event.edit(message('Pekala, şu an sesi anlamaya çalışıyorum..'))
             message_edited = await conv.wait_event(events.MessageEdited(chat))
             response = await conv.get_response(message=msg, timeout=5)
+
         except YouBlockedUserError:
-            await event.edit(f"`Lütfen {chat} engelini kaldırın ve tekrar deneyin`")
+            await event.edit(message(f"Lütfen {chat} engelini kaldırın ve tekrar deneyin"))
             return
         except Exception as e:
             print(e.__class__)
 
         if not response:
-            await event.edit("`Botdan cevap alamadım!`")
+            await event.edit(message("Botdan cevap alamadım! Lütfen tekrar deneyin"))
+        elif response.text.endswith('bunu tanıyamadım__'):
+            await event.edit(message('Bu sesi anlayamadım, sanırım seste bir sorun olmalı..'))
         elif response.text.startswith("Forward"):
-            await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
+            await event.edit(message("Gizlilik ayarları yüzenden alıntı yapamadım"))
         else:
             await event.edit(f'**Şşş, Sanırım bunları duydum**: `{response.text}`')
             await bot.send_read_acknowledge(chat, max_id=(response.id + 3))
@@ -93,33 +97,35 @@ async def _(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        await event.edit("`Herhangi bir kullanıcı mesajına cevap verin.`")
+        await event.edit(message("Herhangi bir kullanıcı mesajına cevap verin."))
         return
     reply_message = await event.get_reply_message()
     if not reply_message.text:
-        await event.edit("`Mesaja cevap verin.`")
+        await event.edit(message("Lütfen alıntıladığınız mesajın ses veya bir video olmadığına dikkat edin."))
         return
     chat = "@SangMataInfo_bot"
     sender = reply_message.sender
     if reply_message.sender.bot:
-        await event.edit("`Botlara cevap veremezsiniz.`")
+        await event.edit(message("Botlara cevap veremezsiniz."))
         return
-    await event.edit("`İşleniyor...`")
+    await event.edit(message("İşleniyor..."))
     async with bot.conversation(chat, exclusive=False) as conv:
         response = None
         try:
             msg = await reply_message.forward_to(chat)
             response = await conv.get_response(message=msg, timeout=5)
         except YouBlockedUserError:
-            await event.edit(f"`Lütfen {chat} engelini kaldırın ve tekrar deneyin`")
+            await event.edit(message(f"Lütfen {chat} engelini kaldırın ve tekrar deneyin"))
             return
         except Exception as e:
             print(e.__class__)
 
         if not response:
-            await event.edit("`Botdan cevap alamadım!`")
+            await event.edit(message("Botdan cevap alamadım! Lütfen tekrar deneyin"))
+        elif response.text.startswith("🔗 🔗"):
+            await event.edit(message('Herhangi bir kayıt bulunamadı..'))
         elif response.text.startswith("Forward"):
-            await event.edit("`Gizlilik ayarları yüzenden alıntı yapamadım`")
+            await event.edit(message("Gizlilik ayarları yüzenden alıntı yapamadım"))
         else:
             await event.edit(response.text)
         await bot.send_read_acknowledge(chat, max_id=(response.id + 3))
