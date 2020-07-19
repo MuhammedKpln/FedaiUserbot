@@ -1,6 +1,6 @@
 from telethon.tl.functions.channels import EditBannedRequest
 
-from userbot import PROTECT_CHAT, bot
+from userbot import PROTECT_CHAT, bot, CMD_HELP
 from userbot.events import register, extract_args
 from userbot.modules.admin import BANNED_RIGHTS
 from userbot.modules.helpers import message
@@ -62,11 +62,13 @@ async def _(e):
 
 @register(outgoing=True, pattern='^.acil$')
 async def _(e):
+    global PROTECT
+    global WARNING_IS_ON
+
     PROTECT = True
     WARNING_IS_ON = False
 
     await e.edit(message('Acil modu acildi! keyfinize bakin.'))
-
 
 
 async def warn_user(e):
@@ -110,3 +112,11 @@ async def warn_user(e):
         message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
 
     await e.client.delete_messages(e.chat_id, [message_id])
+
+
+CMD_HELP.update({
+    'protect': message(
+        'Gruplarınızı floodlardan veya benzeri tehlikelerden korur, aktif edebilmeniz için env ayarlarından'
+        ' grup id\'sini eklemeniz gerekmekte. Ardıdan \'.protect on|off diyerek kapatabilirsiniz.\' '),
+    '.acil': message('Olağan üstü durumları başlatır, uyarı vermek yerine direk banlar.')
+})
