@@ -11,6 +11,7 @@ WARNING_IS_ON = True
 PROTECT = False
 PROTECT_CHATS = PROTECT_CHAT.split(',')
 
+
 @register(incoming=True, pattern="^")
 async def _(e):
     global WARN
@@ -57,6 +58,25 @@ async def _(e):
         return
 
 
+@register(outgoing=True, pattern="^.protectsohbetler$")
+async def _(e):
+    global PROTECT_CHATS
+
+    group_names = []
+
+    await e.edit(message('Koruma altinda olan gruplariniz listeleniyor..'))
+    for chat in PROTECT_CHATS:
+        ch = await bot.get_entity(int(chat))
+
+        group_names.append(ch.title)
+
+    string = message('Korumaya alinan sohbetler: \n')
+
+    string += '\n'.join(group_names)
+
+    return await e.edit(string)
+
+
 @register(outgoing=True, pattern='^.acil$')
 async def _(e):
     global PROTECT
@@ -71,8 +91,7 @@ async def _(e):
 @register(outgoing=True, pattern='^.protectekle$')
 async def _(e):
     import heroku3
-    global  PROTECT_CHATS
-
+    global PROTECT_CHATS
 
     if not e.chat_id in PROTECT_CHATS:
         PROTECT_CHATS.append(e.chat_id)
@@ -82,7 +101,7 @@ async def _(e):
         heroku_app = heroku.apps()[HEROKU_APPNAME]
 
         heroku.update_appconfig(heroku_app.id, {
-            'PROTECT_CHAT': ','.join(PROTECT_CHATS)
+            'PROTECT_CHAT': ','.join(str(x) for x in PROTECT_CHATS)
         })
 
         await e.edit(message(f'{chat.title} koruma altına alındı!'))
@@ -92,11 +111,10 @@ async def _(e):
         await e.edit(message(f'{e.chat_id} id\'li zaten koruma altında!'))
 
 
-@register(outgoing=True, pattern='^.protectsil')
+@register(outgoing=True, pattern='^.protectsil$')
 async def _(e):
     import heroku3
-    global  PROTECT_CHATS
-
+    global PROTECT_CHATS
 
     if e.chat_id in PROTECT_CHATS:
         PROTECT_CHATS.remove(e.chat_id)
@@ -163,5 +181,10 @@ CMD_HELP.update({
     'protect': message(
         'Gruplarınızı floodlardan veya benzeri tehlikelerden korur, aktif edebilmeniz için env ayarlarından'
         ' grup id\'sini eklemeniz gerekmekte. Ardıdan \'.protect on|off diyerek kapatabilirsiniz.\' '),
+    'protectekle': message(
+        'Koruma listesine başka bir sohbet ekler. Kullanım: Korumasını istediğiniz gruptan .protectekle yazmanız yeterli.'),
+    'protectsil': message(
+        'Sohbet için korumayı de-aktif eder. \n Kullanım: Korumayı devredışı bırakmak istediğiniz sohbete .protectsil yazmanız yeterli.'),
+    'protectsohbetler': message('Korumayı aldığınız sohbetleri listeler.'),
     '.acil': message('Olağan üstü durumları başlatır, uyarı vermek yerine direk banlar.')
 })
