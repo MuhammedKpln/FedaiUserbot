@@ -1,6 +1,6 @@
 from telethon.tl.functions.channels import EditBannedRequest
 
-from userbot import PROTECT_CHAT, bot, CMD_HELP
+from userbot import PROTECT_CHAT, bot, CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.events import register, extract_args
 from userbot.modules.admin import BANNED_RIGHTS
 from userbot.modules.helpers import message
@@ -9,14 +9,13 @@ WARN = 0
 WARN_AUTHOR = None
 WARNING_IS_ON = True
 PROTECT = False
-
+PROTECT_CHATS = PROTECT_CHAT.split(',')
 
 @register(incoming=True, pattern="^")
 async def _(e):
     global WARN
     global WARN_AUTHOR
-
-    PROTECT_CHATS = PROTECT_CHAT.split(',')
+    global PROTECT_CHATS
 
     if PROTECT:
         if str(e.chat_id) in PROTECT_CHATS:
@@ -67,6 +66,54 @@ async def _(e):
     WARNING_IS_ON = False
 
     await e.edit(message('Acil modu acildi! keyfinize bakin.'))
+
+
+@register(outgoing=True, pattern='^.protectekle$')
+async def _(e):
+    import heroku3
+    global  PROTECT_CHATS
+
+
+    if not e.chat_id in PROTECT_CHATS:
+        PROTECT_CHATS.append(e.chat_id)
+        chat = await e.client.get_entity(e.chat_id)
+
+        heroku = heroku3.from_key(HEROKU_APIKEY)
+        heroku_app = heroku.apps()[HEROKU_APPNAME]
+
+        heroku.update_appconfig(heroku_app.id, {
+            'PROTECT_CHAT': ','.join(PROTECT_CHATS)
+        })
+
+        await e.edit(message(f'{chat.title} koruma altına alındı!'))
+
+        return
+    else:
+        await e.edit(message(f'{e.chat_id} id\'li zaten koruma altında!'))
+
+
+@register(outgoing=True, pattern='^.protectsil')
+async def _(e):
+    import heroku3
+    global  PROTECT_CHATS
+
+
+    if e.chat_id in PROTECT_CHATS:
+        PROTECT_CHATS.remove(e.chat_id)
+        chat = await e.client.get_entity(e.chat_id)
+
+        heroku = heroku3.from_key(HEROKU_APIKEY)
+        heroku_app = heroku.apps()[HEROKU_APPNAME]
+
+        heroku.update_appconfig(heroku_app.id, {
+            'PROTECT_CHAT': ','.join(PROTECT_CHATS)
+        })
+
+        await e.edit(message(f'{chat.title} için koruma devre dışı bırakıldı!'))
+
+        return
+    else:
+        await e.edit(message(f'Bu sohbet için herhangi bir koruma ayarı bulunmamakta!'))
 
 
 async def warn_user(e):
