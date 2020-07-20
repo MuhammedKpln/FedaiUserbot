@@ -18,13 +18,11 @@ async def _(e):
 
     PROTECT_CHATS = PROTECT_CHAT.split(',')
 
-    print(PROTECT)
-
     if PROTECT:
         if str(e.chat_id) in PROTECT_CHATS:
 
             msg = e.message.message
-            print(e.message)
+
             # if e.user_joined and e.message.fwd_from:
             #     return await warn_user(e)
 
