@@ -116,15 +116,15 @@ async def _(e):
     import heroku3
     global PROTECT_CHATS
 
-    if e.chat_id in PROTECT_CHATS:
-        PROTECT_CHATS.remove(e.chat_id)
+    if str(e.chat_id) in PROTECT_CHATS:
+        PROTECT_CHATS.remove(str(e.chat_id))
         chat = await e.client.get_entity(e.chat_id)
 
         heroku = heroku3.from_key(HEROKU_APIKEY)
         heroku_app = heroku.apps()[HEROKU_APPNAME]
 
         heroku.update_appconfig(heroku_app.id, {
-            'PROTECT_CHAT': ','.join(PROTECT_CHATS)
+            'PROTECT_CHAT': ','.join(str(x) for x in PROTECT_CHATS)
         })
 
         await e.edit(message(f'{chat.title} için koruma devre dışı bırakıldı!'))
