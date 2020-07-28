@@ -1,6 +1,9 @@
-from telethon.tl.functions.channels import EditBannedRequest
+import asyncio
 
-from userbot import PROTECT_CHAT, bot, CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
+from telethon.tl.functions.channels import EditBannedRequest
+from telethon.tl.types import MessageEmpty
+
+from userbot import PROTECT_CHAT, bot, CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME, me
 from userbot.events import register, extract_args
 from userbot.modules.admin import BANNED_RIGHTS
 from userbot.modules.helpers import message
@@ -8,11 +11,11 @@ from userbot.modules.helpers import message
 WARN = 0
 WARN_AUTHOR = None
 WARNING_IS_ON = True
-PROTECT = False
+PROTECT = True
 PROTECT_CHATS = PROTECT_CHAT.split(',')
 
 
-@register(incoming=True, pattern="^")
+@register(incoming=True, pattern="([\t\n])|((.|\n)*)")
 async def _(e):
     global WARN
     global WARN_AUTHOR
@@ -20,19 +23,28 @@ async def _(e):
 
     if PROTECT:
         if str(e.chat_id) in PROTECT_CHATS:
+            if not isinstance(e.message, MessageEmpty):
+                msg = e.message.message
+                space_count = 0
 
-            msg = e.message.message
+                for letter in msg:
+                    if '\n' in letter or '\t' in letter:
+                        space_count = space_count + 1
 
-            # if e.user_joined and e.message.fwd_from:
-            #     return await warn_user(e)
+                # If message has more than 15 spaces, it will warn the user
+                if space_count > 15:
+                    return await warn_user(e)
 
-            # Remove messages that has higher than 200 characters
-            if len(msg) > 200:
-                return await warn_user(e)
+                if e.message.fwd_from:
+                    return await warn_user(e)
 
-            # Remove message that contains hashtag
-            if '#' in msg:
-                return await warn_user(e)
+                # Remove messages that has higher than 200 characters
+                if len(msg) > 200:
+                    return await warn_user(e)
+
+                # Remove message that contains hashtag
+                if '#' in msg:
+                    return await warn_user(e)
 
 
 @register(outgoing=True, pattern='^.protect (.?)')
@@ -45,14 +57,14 @@ async def _(e):
         await e.edit(message('Korumalar acildi!'))
         PROTECT = True
         return
-    else:
+    elif arg == 'on' and PROTECT:
         await e.edit(message('Korumalar zaten aktif! Kapatmak icin .protect off yazin.'))
 
     if arg == 'off' and PROTECT:
         await e.edit(message('Korumalar De-aktif edildi!'))
         PROTECT = False
         return
-    else:
+    elif arg == 'off' and not PROTECT:
         await e.edit(message('Korumalar zaten de-aktif! Yeniden baslatmak icin .protect on yazin.'))
         return
 
@@ -93,6 +105,13 @@ async def _(e):
     global PROTECT_CHATS
 
     if not e.chat_id in PROTECT_CHATS:
+        chat = await e.get_chat()
+        admin = chat.admin_rights
+        creator = chat.creator
+
+        if not admin or not creator:
+            return await e.edit(message('Yönetici olamadığım grubu koruma altına alamam!'))
+
         PROTECT_CHATS.append(e.chat_id)
         chat = await e.client.get_entity(e.chat_id)
 
@@ -149,6 +168,7 @@ async def warn_user(e):
         WARN = WARN + 1
 
     if WARN_AUTHOR == message_author.id and WARN == 3 and WARNING_IS_ON:
+        print('selam')
         await bot(EditBannedRequest(
             channel=e.chat_id,
             user_id=message_author.id,
@@ -157,23 +177,32 @@ async def warn_user(e):
 
         WARN = 0
 
-        await e.reply(message(f'{message_author.first_name} Banlandın! '))
+        await e.client.delete_messages(e.chat_id, [message_id])
+        await e.reply(f'**FEDAI:** [{message_author.first_name}](tg://user?id={message_author.id}) `Banlandın!` ')
+
+        return
+
+    elif WARNING_IS_ON and WARN < 3:
+
+        warning = await e.reply(
+            message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
+
+        await e.client.delete_messages(e.chat_id, [message_id])
+        WARN_AUTHOR = message_author.id
+        await asyncio.sleep(3)
+        await warning.delete()
+
+        return
+
     elif not WARNING_IS_ON:
+        print('aselam')
         await bot(EditBannedRequest(
             channel=e.chat_id,
             user_id=message_author.id,
             banned_rights=BANNED_RIGHTS
         ))
 
-        await e.reply(message(f'{message_author.first_name} Banlandın! '))
-
-    WARN = 0
-
-    WARN_AUTHOR = message_author.id
-    await e.reply(
-        message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
-
-    await e.client.delete_messages(e.chat_id, [message_id])
+        await e.reply(f'**FEDAI:** [{message_author.first_name}](tg://user?id={message_author.id}) `Banlandın!` ')
 
 
 CMD_HELP.update({
