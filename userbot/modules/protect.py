@@ -47,7 +47,6 @@ async def _(e):
         return
     else:
         await e.edit(message('Korumalar zaten aktif! Kapatmak icin .protect off yazin.'))
-        return
 
     if arg == 'off' and PROTECT:
         await e.edit(message('Korumalar De-aktif edildi!'))
