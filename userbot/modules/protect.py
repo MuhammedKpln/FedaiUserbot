@@ -107,9 +107,10 @@ async def _(e):
     if not e.chat_id in PROTECT_CHATS:
         chat = await e.get_chat()
         admin = chat.admin_rights
-        creator = chat.creator
 
-        if not admin or not creator:
+        print(admin.delete_messages, admin.ban_users)
+
+        if not admin.delete_messages and not admin.ban_users:
             return await e.edit(message('Yönetici olamadığım grubu koruma altına alamam!'))
 
         PROTECT_CHATS.append(e.chat_id)
