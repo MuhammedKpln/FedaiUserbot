@@ -16,8 +16,11 @@
 from asyncio import sleep
 from re import fullmatch, IGNORECASE
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
+from telethon.tl.types import MessageMediaDocument, MessageMediaPhoto
+
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot, me
 from userbot.events import extract_args, register
+from userbot.modules.helpers import message
 
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
@@ -31,16 +34,35 @@ async def filter_incoming_handler(handler):
             return
         name = handler.raw_text
         filters = get_filters(handler.chat_id)
+
         if not filters:
             return
+
         for trigger in filters:
             pro = fullmatch(trigger.keyword, name, flags=IGNORECASE)
             if pro and trigger.f_mesg_id:
                 msg_o = await handler.client.get_messages(
                     entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id))
                 await handler.reply(msg_o.message, file=msg_o.media)
+
             elif pro and trigger.reply:
-                await handler.reply(trigger.reply)
+
+                try:
+                    selam = int(trigger.reply)
+                    async for doc in handler.client.iter_messages(me.id, search='FedaiFiltresi\'dir silmeyiniz.'):
+                        if doc.media:
+                            if isinstance(doc.media, MessageMediaDocument):
+                                document = doc.media.document
+                                document_id = doc.media.document.id
+                            elif isinstance(doc.media, MessageMediaPhoto):
+                                document = doc.media.photo
+                                document_id = doc.media.photo.id
+
+                            if document_id == int(trigger.reply):
+                                await handler.reply(file=document)
+                                break
+                except Exception as e:
+                    await handler.reply(trigger.reply)
 
 
 @register(outgoing=True, pattern="^.filter")
@@ -52,54 +74,67 @@ async def add_new_filter(new_handler):
         await new_handler.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
     arr = extract_args(new_handler).split(' ', 1)
-    if len(arr) < 2:
-        await new_handler.edit("`Komut kullanımı hatalı.`")
-        return
     keyword = arr[0]
-    string = arr[1]
     msg = await new_handler.get_reply_message()
     msg_id = None
-    if msg and msg.media and not string:
-        if BOTLOG_CHATID:
-            await new_handler.client.send_message(
-                BOTLOG_CHATID, f"#FILTER\
-            \nGrup ID: {new_handler.chat_id}\
-            \nFiltre: {keyword}\
-            \n\nBu mesaj filtrenin cevaplanması için kaydedildi, lütfen bu mesajı silmeyin!"
-            )
-            msg_o = await new_handler.client.forward_messages(
-                entity=BOTLOG_CHATID,
-                messages=msg,
-                from_peer=new_handler.chat_id,
-                silent=True)
-            msg_id = msg_o.id
+
+    if msg and msg.media:
+        if isinstance(msg.media, MessageMediaDocument):
+            document = await bot.send_message('me', 'FedaiFiltresi\'dir silmeyiniz.', file=msg.media.document)
+            document_id = document.media.document.id
+        elif isinstance(msg.media, MessageMediaPhoto):
+            document = await bot.send_message('me', 'FedaiFiltresi\'dir silmeyiniz.', file=msg.media.photo)
+            document_id = document.media.photo.id
+
+        save_filter = add_filter(str(new_handler.chat_id), keyword, document_id, msg_id)
+
+        if save_filter:
+            await new_handler.edit(message('Yeni filtreniz başarılı bir sekilde kayıt edildi.'))
         else:
-            await new_handler.edit(
-                "`Bir medyanın filtreye karşılık olarak kaydedilebilmesi için BOTLOG_CHATID değerinin ayarlanması gerekli.`"
-            )
-            return
-    elif new_handler.reply_to_msg_id and not string:
-        rep_msg = await new_handler.get_reply_message()
-        string = rep_msg.text
-    success = " **{}** `filtresi {}`"
-    if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        await new_handler.edit(success.format(keyword, 'eklendi'))
+            await new_handler.edit(message(f'{keyword} güncellendi.'))
+
     else:
-        await new_handler.edit(success.format(keyword, 'güncellendi'))
+        success = " **{}** `filtresi {}`"
+        string = arr[1]
+        if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
+            await new_handler.edit(success.format(keyword, 'eklendi'))
+        else:
+            await new_handler.edit(success.format(keyword, 'güncellendi'))
 
 
 @register(outgoing=True, pattern="^.stop")
 async def remove_a_filter(r_handler):
     """ .stop komutu bir filtreyi durdurmanızı sağlar. """
     try:
-        from userbot.modules.sql_helper.filter_sql import remove_filter
+        from userbot.modules.sql_helper.filter_sql import remove_filter, get_filters, get_filter
     except:
         await r_handler.edit("`Bot Non-SQL modunda çalışıyor!!`")
         return
     filt = extract_args(r_handler)
-    if not remove_filter(r_handler.chat_id, filt):
+    filters = get_filters(r_handler.chat_id)
+    filter = get_filter(r_handler.chat_id, filt)
+
+    if not filter:
         await r_handler.edit(" **{}** `filtresi mevcut değil.`".format(filt))
     else:
+        try:
+            for filter in filters:
+                selam = int(filter.reply)
+                async for doc in r_handler.client.iter_messages(me.id, search='FedaiFiltresi\'dir silmeyiniz.'):
+                    if doc.media:
+                        if isinstance(doc.media, MessageMediaDocument):
+                            document_id = doc.media.document.id
+                        elif isinstance(doc.media, MessageMediaPhoto):
+                            document_id = doc.media.photo.id
+
+                        if document_id == int(filter.reply):
+                            await bot.delete_messages('me', doc.id)
+                            break
+
+        except Exception as e:
+            pass
+
+        remove_filter(r_handler.chat_id, filt)
         await r_handler.edit(
             "**{}** `filtresi başarıyla silindi`".format(filt))
 
