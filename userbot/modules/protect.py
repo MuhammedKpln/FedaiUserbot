@@ -3,7 +3,7 @@ import asyncio
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import MessageEmpty
 
-from userbot import PROTECT_CHAT, bot, CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME, me
+from userbot import PROTECT_CHAT, bot, CMD_HELP, HEROKU_APIKEY, HEROKU_APPNAME
 from userbot.events import register, extract_args
 from userbot.modules.admin import BANNED_RIGHTS
 from userbot.modules.helpers import message
@@ -35,7 +35,8 @@ async def _(e):
                 if space_count > 15:
                     return await warn_user(e)
 
-                if e.message.fwd_from:
+                # Warn user if forwarded messages includes media.
+                if e.message.fwd_from and e.message.media:
                     return await warn_user(e)
 
                 # Remove messages that has higher than 200 characters
@@ -107,8 +108,6 @@ async def _(e):
     if not e.chat_id in PROTECT_CHATS:
         chat = await e.get_chat()
         admin = chat.admin_rights
-
-        print(admin.delete_messages, admin.ban_users)
 
         if not admin.delete_messages and not admin.ban_users:
             return await e.edit(message('Yönetici olamadığım grubu koruma altına alamam!'))
