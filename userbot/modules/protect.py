@@ -168,7 +168,6 @@ async def warn_user(e):
         WARN = WARN + 1
 
     if WARN_AUTHOR == message_author.id and WARN == 3 and WARNING_IS_ON:
-        print('selam')
         await bot(EditBannedRequest(
             channel=e.chat_id,
             user_id=message_author.id,
@@ -195,7 +194,6 @@ async def warn_user(e):
         return
 
     elif not WARNING_IS_ON:
-        print('aselam')
         await bot(EditBannedRequest(
             channel=e.chat_id,
             user_id=message_author.id,
