@@ -184,7 +184,7 @@ async def warn_user(e):
     elif WARNING_IS_ON and WARN < 3:
 
         warning = await e.reply(
-            message(f'Lütfen flood atmayın, sadece 3 hakkınız var banlanırsınız! \n\n **Giden Hak**: {WARN}'))
+            message(f'Yapmaya calıştığınız şey sahibim tarafından yasaklandı! \n\n **Giden Hak**: {WARN}'))
 
         await e.client.delete_messages(e.chat_id, [message_id])
         WARN_AUTHOR = message_author.id
