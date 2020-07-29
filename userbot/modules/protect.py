@@ -1,5 +1,6 @@
 import asyncio
 
+from telethon.events import NewMessage
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import MessageEmpty
 
@@ -15,7 +16,7 @@ PROTECT = True
 PROTECT_CHATS = PROTECT_CHAT.split(',')
 
 
-@register(incoming=True, pattern="([\t\n])|((.|\n)*)")
+@bot.on(NewMessage(incoming=True))
 async def _(e):
     global WARN
     global WARN_AUTHOR
@@ -25,6 +26,7 @@ async def _(e):
         if str(e.chat_id) in PROTECT_CHATS:
             if not isinstance(e.message, MessageEmpty):
                 msg = e.message.message
+                print(msg)
                 space_count = 0
 
                 for letter in msg:
